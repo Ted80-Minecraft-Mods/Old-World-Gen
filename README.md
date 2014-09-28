@@ -1,5 +1,3 @@
-Old-World-Gen
-=============
 The good old minecraft world gen from back in the days
 http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1281910-better-world-generation-4-v1-2-1
 
@@ -12,3 +10,8 @@ Features:
 
 Planned:
 - option for new blocks/items from latest minecraft updates in old generators
+
+## CHANGELOG ##
+
+    Version 1.0.0 '28-09-2014'
+    - Release
