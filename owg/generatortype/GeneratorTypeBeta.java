@@ -3,7 +3,10 @@ package owg.generatortype;
 import owg.biomes.BiomeList;
 import owg.generator.ChunkGeneratorBeta;
 import owg.gui.GuiGeneratorSettings;
+import owg.gui.GuiSettingsButton;
+import owg.gui.GuiSettingsSlider;
 import owg.world.ManagerOWG;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.WorldChunkManager;
@@ -18,9 +21,17 @@ public class GeneratorTypeBeta extends GeneratorType
 	}
 	
 	@Override
+	public boolean getSettings(GuiGeneratorSettings gui)
+	{
+		gui.settings.add(new GuiSettingsButton(new String[]{StatCollector.translateToLocal("owg.biomes.biomes") + ": " + StatCollector.translateToLocal("owg.biomes.original"), StatCollector.translateToLocal("owg.biomes.biomes") + ": " + StatCollector.translateToLocal("owg.biomes.vanilla"), StatCollector.translateToLocal("owg.biomes.biomes") + ": " + StatCollector.translateToLocal("owg.biomes.all")}, new int[]{0, 1, 2}, 20, 50, gui.width));
+		return true;
+	}
+	
+	@Override
 	public WorldChunkManager getServerWorldChunkManager(World world)
     {
-		return new ManagerOWG(world, true);
+		int biomes = trySetting(0, 2);
+		return new ManagerOWG(world, true, biomes);
     }
 
 	@Override
@@ -32,6 +43,7 @@ public class GeneratorTypeBeta extends GeneratorType
 	@Override
     public IChunkProvider getChunkGenerator(World world)
     {	
-        return new ChunkGeneratorBeta(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled(), trySetting(0, 1) + 1);
+		int biomes = trySetting(0, 2);
+        return new ChunkGeneratorBeta(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled(), biomes);
     }
 }

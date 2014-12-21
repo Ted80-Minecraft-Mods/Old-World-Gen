@@ -3,6 +3,7 @@ package owg.generator;
 import java.util.List;
 import java.util.Random;
 
+import owg.data.DungeonLoot;
 import owg.deco.DecoIndevHouse;
 import owg.deco.DecoSkyDungeon;
 import owg.deco.OldGenDungeons;
@@ -55,30 +56,35 @@ public class ChunkGeneratorIndev implements IChunkProvider
     private MapGenMineshaft mineshaftGenerator = new MapGenMineshaft();
     private BiomeGenBase[] biomesForGeneration;
 
-    double[] noise1;
-    double[] noise2;
-    double[] noise3;
-    double[] noise5;
-    double[] noise6;
+    private double[] noise1;
+    private double[] noise2;
+    private double[] noise3;
+    private double[] noise5;
+    private double[] noise6;
 
-    float[] parabolicField;
-    int[][] field_73219_j = new int[32][32];
+    private float[] parabolicField;
+    private int[][] field_73219_j = new int[32][32];
 
-	boolean themeHELL = false;
-	boolean themePARADISE = false;
-	boolean themeWOODS = false;
-	boolean themeSNOW = false;
-	boolean typeIsland = false;
-	boolean typeFloating = false;
-	boolean typeInland = false;
-	boolean typeFinite = false;
-	int size = 1;
-	double width = 1;
-	int layers = 1;
+    private boolean themeHELL = false;
+    private boolean themePARADISE = false;
+    private boolean themeWOODS = false;
+    private boolean themeSNOW = false;
+    private boolean typeIsland = false;
+    private boolean typeFloating = false;
+    private boolean typeInland = false;
+    private boolean typeFinite = false;
+    private int size = 1;
+    private double width = 1;
+    private int layers = 1;
+    private int dungeons = 0;
+    private boolean spawnSet = false;
+    private int dungeonRate = 15;
 
-    public ChunkGeneratorIndev(World par1World, long par2, boolean par4, int type, int theme, int s, int l)
+    public ChunkGeneratorIndev(World par1World, long par2, boolean par4, int type, int theme, int s, int l, int d)
     {
         this.worldObj = par1World;
+		worldObj.getWorldInfo().setSpawnPosition(0, 256, 0);
+		
         this.mapFeaturesEnabled = par4;
         this.rand = new Random(par2);
         this.noiseGen1 = new NoiseOctavesIndev(this.rand, 16);
@@ -100,13 +106,16 @@ public class ChunkGeneratorIndev implements IChunkProvider
 		if(type == 2) { typeFloating = true; }
 		if(type == 3) { typeInland = true; }
 		if(type == 4) { typeFinite = true; } 
+		
+		dungeons = d;
+		DungeonLoot.init(par2);
 
 		size = s;
 		if(typeFloating)
 		{
-			if(s == 1) { size = 6; width = 1.2D; }
-			if(s == 2) { size = 12; width = 2D; }
-			if(s == 3) { size = 18; width = 3D; }
+			if(s == 1) { size = 6; width = 1.2D; dungeonRate = 8; }
+			if(s == 2) { size = 12; width = 2D; dungeonRate = 10; }
+			if(s == 3) { size = 18; width = 3D; dungeonRate = 12; }
 		}
 		if(typeIsland)
 		{
@@ -115,11 +124,15 @@ public class ChunkGeneratorIndev implements IChunkProvider
 			if(s == 3) { size = 7; }
 		}
 		layers = l;
-		System.out.println(layers);
     }
 
 	public void generateSkylands(int par1, int par2, Block[] blocks)
 	{
+		if(worldObj.getWorldInfo().getSpawnX() != 0)
+		{
+			worldObj.getWorldInfo().setSpawnPosition(0, 256, 0);
+		}
+		
 		int seaLevel = 64;
 		int i = par1 << 4;
 		int j = par2 << 4;
@@ -543,13 +556,13 @@ public class ChunkGeneratorIndev implements IChunkProvider
 		//ORES
 		if(typeFloating)
 		{
-			if(par2 == 0 && par3 == 0)
+			if(par2 == 0 && par3 == 0 && dungeons < 2)
 			{
 				(new DecoSkyDungeon(true)).generate(worldObj, rand, 0, 2, 0);
 			}
-			else
+			else if(dungeons == 0)
 			{
-				if(rand.nextInt(30) == 0)
+				if(rand.nextInt(dungeonRate) == 0)
 				{
 					int j5 = var4 + rand.nextInt(16) + 8;
 					int k88 = rand.nextInt(15);

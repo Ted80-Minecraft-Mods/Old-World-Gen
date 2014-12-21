@@ -12,7 +12,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid="OWG", name="OldWorldGen", version="1.0.0")
+@Mod(modid="OWG", name="OldWorldGen", version="1.0.2")
 public class OWG
 {	
 	@Instance("OWG")

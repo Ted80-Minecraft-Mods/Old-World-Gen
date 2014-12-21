@@ -3,6 +3,7 @@ package owg.generator;
 import java.util.List;
 import java.util.Random;
 
+import owg.data.DungeonLoot;
 import owg.deco.OldGenBigTree;
 import owg.deco.OldGenCactus;
 import owg.deco.OldGenClay;
@@ -74,6 +75,8 @@ public class ChunkGeneratorInfdev implements IChunkProvider
         field_907_p = world;
         mapFeaturesEnabled = par4;
         alpha = a;
+        
+        DungeonLoot.init(l);
         
         field_913_j = new Random(l);
         field_912_k = new NoiseOctavesInfdev(field_913_j, 16);

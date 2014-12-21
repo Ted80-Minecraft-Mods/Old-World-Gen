@@ -26,6 +26,7 @@ public class GeneratorTypeIndev extends GeneratorType
 		gui.settings.add(new GuiSettingsButton(new String[]{StatCollector.translateToLocal("owg.setting.type") + ": " + StatCollector.translateToLocal("owg.type.island"), StatCollector.translateToLocal("owg.setting.type") + ": " + StatCollector.translateToLocal("owg.type.floating"), StatCollector.translateToLocal("owg.setting.type") + ": " + StatCollector.translateToLocal("owg.type.inland")}, new int[]{0, 1, 2}, 21, 70, gui.width));
 		gui.settings.add(new GuiSettingsSlider(new String[]{StatCollector.translateToLocal("owg.setting.size") + ": " + StatCollector.translateToLocal("owg.setting.small"), StatCollector.translateToLocal("owg.setting.size") + ": " + StatCollector.translateToLocal("owg.setting.default"), StatCollector.translateToLocal("owg.setting.size") + ": " + StatCollector.translateToLocal("owg.setting.large")}, new int[]{0, 1, 2}, 1, 22, 90, gui.width, 21, new int[]{0, 1}));
 		gui.settings.add(new GuiSettingsSlider(new String[]{StatCollector.translateToLocal("owg.setting.layer") + ": 1", StatCollector.translateToLocal("owg.setting.layer") + ": 2", StatCollector.translateToLocal("owg.setting.layer") + ": 3", StatCollector.translateToLocal("owg.setting.layer") + ": 4", StatCollector.translateToLocal("owg.setting.layer") + ": 5"}, new int[]{0, 1, 2, 3, 4}, 1, 23, 110, gui.width, 21, new int[]{1}));
+		gui.settings.add(new GuiSettingsButton(new String[]{StatCollector.translateToLocal("owg.setting.dungeon") + ": " + StatCollector.translateToLocal("owg.setting.on"), StatCollector.translateToLocal("owg.setting.dungeon") + ": " + StatCollector.translateToLocal("owg.setting.end"), StatCollector.translateToLocal("owg.setting.dungeon") + ": " + StatCollector.translateToLocal("owg.setting.off")}, new int[]{0, 1, 2}, 24, 130, gui.width, 21, new int[]{1}));
 		return true;
 	}
 	
@@ -52,6 +53,7 @@ public class GeneratorTypeIndev extends GeneratorType
 		int typeID = trySetting(1, 2) + 1;
 		int size = trySetting(2, 2) + 1;
 		int layers = trySetting(3, 4) + 1;
-		return new ChunkGeneratorIndev(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled(), typeID, themeID, size, layers); 
+		int dungeons = trySetting(4, 2);
+		return new ChunkGeneratorIndev(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled(), typeID, themeID, size, layers, dungeons); 
     }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import owg.biomes.BiomeList;
+import owg.data.DungeonLoot;
 import owg.deco.OldGenBigTree;
 import owg.deco.OldGenCactus;
 import owg.deco.OldGenClay;
@@ -61,6 +62,7 @@ public class ChunkGeneratorAlpha implements IChunkProvider
     private MapGenStronghold strongholdGenerator = new MapGenStronghold();
     private MapGenMineshaft mineshaftGenerator = new MapGenMineshaft();
     private BiomeGenBase field_4179_v[];
+	private int biomeSettings;
 	
     double field_4185_d[];
     double field_4184_e[];
@@ -70,7 +72,7 @@ public class ChunkGeneratorAlpha implements IChunkProvider
     int field_914_i[][];
     private double field_4178_w[];
 
-    public ChunkGeneratorAlpha(World world, long l, boolean par4)
+    public ChunkGeneratorAlpha(World world, long l, boolean par4, int bSettings)
     {
         field_905_r = new double[256];
         field_904_s = new double[256];
@@ -81,6 +83,7 @@ public class ChunkGeneratorAlpha implements IChunkProvider
         mapFeaturesEnabled = par4;
         field_913_j = new Random(l);
         rand2 = new Random(l);
+        biomeSettings = bSettings;
         field_912_k = new NoiseOctavesAlpha(field_913_j, 16);
         field_911_l = new NoiseOctavesAlpha(field_913_j, 16);
         field_910_m = new NoiseOctavesAlpha(field_913_j, 8);
@@ -89,6 +92,8 @@ public class ChunkGeneratorAlpha implements IChunkProvider
         field_922_a = new NoiseOctavesAlpha(field_913_j, 10);
         field_921_b = new NoiseOctavesAlpha(field_913_j, 16);
         field_920_c = new NoiseOctavesAlpha(field_913_j, 8);
+        
+        DungeonLoot.init(l);
     }
 
     public void generateTerrain(int i, int j, Block blocks[], BiomeGenBase abiomegenbase[], double ad[])

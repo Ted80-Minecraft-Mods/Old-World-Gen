@@ -3,6 +3,7 @@ package owg.world;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import owg.OWG;
+import owg.biomes.BiomeList;
 import owg.data.DecodeGeneratorString;
 import owg.generatortype.GeneratorType;
 import owg.gui.GuiGeneratorSettings;
@@ -12,6 +13,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManager;
+import net.minecraft.world.biome.WorldChunkManagerHell;
 import net.minecraft.world.chunk.IChunkProvider;
 
 public class WorldTypeOWG extends WorldType
@@ -39,7 +41,14 @@ public class WorldTypeOWG extends WorldType
 		}
 		else
 		{
-			return GeneratorType.currentGenerator.getClientWorldChunkManager(world);
+			if(GeneratorType.currentGenerator == null)
+			{
+				return new WorldChunkManagerHell(BiomeList.OLDplains, 0.5F);
+			}
+			else
+			{
+				return GeneratorType.currentGenerator.getClientWorldChunkManager(world);
+			}
 		}
     }
 

@@ -15,6 +15,13 @@ owg.setting.off=OFF
 owg.setting.theme=Theme
 owg.setting.type=Type
 owg.setting.layer=Layer
+owg.setting.dungeon=Dungeons
+owg.setting.end=End portal only
+
+owg.biomes.biomes=Biomes
+owg.biomes.original=Original
+owg.biomes.vanilla=Vanilla
+owg.biomes.all=Vanilla + Mods
 
 owg.theme.default=Default
 owg.theme.snow=Snow

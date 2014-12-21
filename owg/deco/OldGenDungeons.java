@@ -2,6 +2,7 @@ package owg.deco;
 
 import java.util.Random;
 
+import owg.data.DungeonLoot;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -183,64 +184,21 @@ public class OldGenDungeons extends WorldGenerator
         return true;
     }
 	
-    private ItemStack pickCheckLootItem(Random random)
-    {
-        int i = random.nextInt(11);
-        if(i == 0)
-        {
-            return new ItemStack(Items.saddle);
-        }
-        if(i == 1)
-        {
-            return new ItemStack(Items.iron_ingot, random.nextInt(4) + 1);
-        }
-        if(i == 2)
-        {
-            return new ItemStack(Items.bread);
-        }
-        if(i == 3)
-        {
-            return new ItemStack(Items.wheat, random.nextInt(4) + 1);
-        }
-        if(i == 4)
-        {
-            return new ItemStack(Items.gunpowder, random.nextInt(4) + 1);
-        }
-        if(i == 5)
-        {
-            return new ItemStack(Items.string, random.nextInt(4) + 1);
-        }
-        if(i == 6)
-        {
-            return new ItemStack(Items.bucket);
-        }
-        if(i == 7 && random.nextInt(100) == 0)
-        {
-            return new ItemStack(Items.golden_apple);
-        }
-        if(i == 8 && random.nextInt(2) == 0)
-        {
-            return new ItemStack(Items.redstone, random.nextInt(4) + 1);
-        }
-        if(i == 9 && random.nextInt(10) == 0)
-        {
-        	if(random.nextInt(2) == 0)
-        	{
-        		return new ItemStack(Items.record_13);
-        	}
-        	else
-        	{
-        		return new ItemStack(Items.record_cat);
-        	}
-        }
-        if(i == 10)
-        {
-            return new ItemStack(Items.dye, 1, 3);
-        } else
-        {
-            return null;
-        }
-    }
+	private ItemStack pickCheckLootItem(Random random)
+	{
+		//fix for world gen seed
+		int i = random.nextInt(11), r = 0;
+		if(i == 1) { r = random.nextInt(4) + 1; }
+		else if(i == 3) { r = random.nextInt(4) + 1; }
+		else if(i == 4) { r = random.nextInt(4) + 1; }
+		else if(i == 5) { r = random.nextInt(4) + 1; }
+		else if(i == 7 && random.nextInt(100) == 0) { }
+		else if(i == 8 && random.nextInt(2) == 0) { r = random.nextInt(4) + 1; }
+		else if(i == 9 && random.nextInt(10) == 0) { r = random.nextInt(2); }
+		
+		//getting item from DungeonLoot array
+		return DungeonLoot.pickItem();
+	}
 
     private String pickMobSpawner(Random random)
     {

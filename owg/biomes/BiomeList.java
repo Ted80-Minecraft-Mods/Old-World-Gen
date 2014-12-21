@@ -33,6 +33,6 @@ public class BiomeList
 		OLDtundra = (new BiomeBeta(ConfigOWG.biomeIDs[9], 9)).setColor(16777215).setBiomeName("tundra").setTemperatureRainfall(0.1F, 0.1F).setEnableSnow();
 		
 		CLASSICnormal = (new BiomeClassic(ConfigOWG.biomeIDs[10])).setColor(353825).setBiomeName("Classic");
-		CLASSICsnow = (new BiomeClassic(ConfigOWG.biomeIDs[11])).setColor(353825).setBiomeName("Classic Snow").setEnableSnow().setTemperatureRainfall(0.0F, 0.5F);
+		CLASSICsnow = (new BiomeClassic(ConfigOWG.biomeIDs[11])).setColor(353825).setBiomeName("Classic_Snow").setEnableSnow().setTemperatureRainfall(0.0F, 0.5F);
 	}
 }

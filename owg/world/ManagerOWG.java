@@ -6,6 +6,8 @@ import java.util.Random;
 
 import owg.biomes.BiomeList;
 import owg.noise.OldNoiseGeneratorOctaves2;
+import owg.util.CellNoise;
+import owg.util.PerlinNoise;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeCache;
@@ -26,13 +28,20 @@ public class ManagerOWG extends WorldChunkManager
     public static double field_4196_c[];
     private static int biomeLookupTable[] = new int[4096];	
     
+    public static ArrayList<BiomeGenBase> biomeList;
+    public static int biomeListLength;
+    public static int biomeSetting;
+    public static float perlinStrength;
+    private static PerlinNoise perlin;
+    private static CellNoise biomecell;
+    
 	protected ManagerOWG()
 	{
         this.biomeCache = new BiomeCache(this);
         this.biomesToSpawnIn = new ArrayList();
 	}
 
-    public ManagerOWG(World par1World, boolean remote)
+    public ManagerOWG(World par1World, boolean remote, int biomes)
     {
         this();
         long seed = par1World.getSeed();
@@ -43,6 +52,46 @@ public class ManagerOWG extends WorldChunkManager
 	        field_4194_e = new OldNoiseGeneratorOctaves2(new Random(seed * 9871L), 4);
 	        field_4193_f = new OldNoiseGeneratorOctaves2(new Random(seed * 39811L), 4);
 	        field_4192_g = new OldNoiseGeneratorOctaves2(new Random(seed * 0x84a59L), 2);
+	        
+	        biomeList = new ArrayList<BiomeGenBase>();
+	        biomeSetting = biomes;
+	        perlin = new PerlinNoise(seed);
+	        biomecell = new CellNoise(seed, (short)0);
+			BiomeGenBase[] b = BiomeGenBase.getBiomeGenArray();
+			int l = b.length;
+			
+			if(biomes == 1)
+			{
+				for(int i = 0; i < l; i++)
+				{
+					if(b[i] != null && b[i].biomeID > 39 && b[i].biomeID > 128 && b[i].biomeID < 168)
+					{
+						if(!b[i].biomeName.contains("Ocean") && !b[i].biomeName.contains("River") && !b[i].biomeName.contains("Mushroom") && !b[i].biomeName.contains("Beach") && !b[i].biomeName.contains("Hell") && !b[i].biomeName.contains("Sky"))
+						{
+							biomeList.add(b[i]);
+						}
+					}
+				}
+			}
+			else if(biomes == 2)
+			{
+				for(int i = 0; i < l; i++)
+				{
+					if(b[i] != null)
+					{
+						if(!b[i].biomeName.contains("Ocean") && !b[i].biomeName.contains("River") && !b[i].biomeName.contains("Mushroom") && !b[i].biomeName.contains("Beach") && !b[i].biomeName.contains("Hell") && !b[i].biomeName.contains("Sky"))
+						{
+							biomeList.add(b[i]);
+						}
+					}
+				}
+			}
+			
+			if(biomes > 0)
+			{
+				biomeListLength = biomeList.size();
+				perlinStrength = 1 / (biomeListLength * 2);
+			}
         }
     }    
 
@@ -119,6 +168,26 @@ public class ManagerOWG extends WorldChunkManager
 				temperature[i1] = d3;
 				humidity[i1] = d4;
 				abiomegenbase[i1++] = getBiomeFromLookup(d3, d4);
+			}
+		}
+		
+		if(biomeSetting > 0)
+		{
+			float h;
+			int k11;
+			int i2 = 0;
+			float off;
+			for(int j11 = 0; j11 < par3; j11++)
+			{
+				for(k11 = 0; k11 < par4; k11++)
+				{
+					off = perlin.noise2((par1 + j11) / 30F, (par2 + k11) / 30F) * 80 + perlin.noise2((par1 + j11) / 7F, (par2 + k11) / 7F) * 20;
+					
+					h = (biomecell.noise((par1 + j11 + off) / 250D, (par2 + k11 - off) / 250D, 1D) * 0.5f) + 0.5f;
+					h = h < 0f ? 0f : h >= 0.9999999f ? 0.9999999f : h;
+					h *= biomeListLength;
+					abiomegenbase[i2++] = biomeList.get((int)(h)).biomeID;
+				}
 			}
 		}
 		return abiomegenbase;
