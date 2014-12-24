@@ -69,47 +69,26 @@ public class ManagerOWG extends WorldChunkManager
 	        biomeSetting = biomes;
 	        perlin = new PerlinNoise(seed);
 	        biomecell = new CellNoise(seed, (short)0);
-			BiomeGenBase[] b = BiomeGenBase.getBiomeGenArray();
-			int l = b.length;
 			
 			if(biomes == 1)
 			{
-			    biomeList_snow.add(BiomeGenBase.coldTaiga);
-			    biomeList_snow.add(BiomeGenBase.coldTaigaHills);
 			    biomeList_snow.add(BiomeGenBase.icePlains);
 			    biomeList_snow.add(BiomeGenBase.iceMountains);
-			    biomeList_snow.add(BiomeGenBase.coldTaiga);
-			    biomeList_snow.add(BiomeGenBase.coldTaigaHills);
+			    biomeList_snow.add(BiomeGenBase.taiga);
 			    
 				biomeList_cold.add(BiomeGenBase.plains);
 			    biomeList_cold.add(BiomeGenBase.extremeHills);
 			    biomeList_cold.add(BiomeGenBase.forest);
-			    biomeList_cold.add(BiomeGenBase.taiga);
 			    biomeList_cold.add(BiomeGenBase.forestHills);
 			    biomeList_cold.add(BiomeGenBase.taigaHills);
 			    biomeList_cold.add(BiomeGenBase.extremeHillsEdge);
-			    biomeList_cold.add(BiomeGenBase.birchForest);
-			    biomeList_cold.add(BiomeGenBase.birchForestHills);
-			    biomeList_cold.add(BiomeGenBase.megaTaiga);
-			    biomeList_cold.add(BiomeGenBase.megaTaigaHills);
-			    biomeList_cold.add(BiomeGenBase.extremeHillsPlus);
 
 				biomeList_hot.add(BiomeGenBase.desert);
 			    biomeList_hot.add(BiomeGenBase.desertHills);
-			    biomeList_hot.add(BiomeGenBase.savanna);
-			    biomeList_hot.add(BiomeGenBase.savannaPlateau);
-			    biomeList_hot.add(BiomeGenBase.mesa);
-			    biomeList_hot.add(BiomeGenBase.mesaPlateau_F);
-			    biomeList_hot.add(BiomeGenBase.mesaPlateau);
-			    biomeList_hot.add(BiomeGenBase.savanna);
-			    biomeList_hot.add(BiomeGenBase.savannaPlateau);
 
 			    biomeList_wet.add(BiomeGenBase.swampland);
 			    biomeList_wet.add(BiomeGenBase.jungle);
 			    biomeList_wet.add(BiomeGenBase.jungleHills);
-			    biomeList_wet.add(BiomeGenBase.jungleEdge);
-			    biomeList_wet.add(BiomeGenBase.roofedForest);
-			    biomeList_wet.add(BiomeGenBase.jungleEdge);
 			}
 			else if(biomes == 2)
 			{
@@ -347,7 +326,7 @@ public class ManagerOWG extends WorldChunkManager
 
         for (int var7 = 0; var7 < par4 * par5; ++var7)
         {
-            float var8 = (float)BiomeGenBase.getBiome(var6[var7]).getIntRainfall() / 65536.0F;
+            float var8 = (float)BiomeGenBase.biomeList[var6[var7]].getIntRainfall() / 65536.0F;
 
             if (var8 > 1.0F)
             {
@@ -365,7 +344,7 @@ public class ManagerOWG extends WorldChunkManager
         return par1;
     }
 
-    /*public float[] getTemperatures(float[] par1ArrayOfFloat, int par2, int par3, int par4, int par5)
+    public float[] getTemperatures(float[] par1ArrayOfFloat, int par2, int par3, int par4, int par5)
     {
         IntCache.resetIntCache();
 
@@ -378,7 +357,7 @@ public class ManagerOWG extends WorldChunkManager
 
         for (int var7 = 0; var7 < par4 * par5; ++var7)
         {
-            float var8 = (float)BiomeGenBase.func_150568_d(var6[var7]).getIntTemperature() / 65536.0F;
+            float var8 = (float)BiomeGenBase.biomeList[var6[var7]].getIntTemperature() / 65536.0F;
 
             if (var8 > 1.0F)
             {
@@ -389,7 +368,7 @@ public class ManagerOWG extends WorldChunkManager
         }
 
         return par1ArrayOfFloat;
-    }*/
+    }
 
     public BiomeGenBase[] getBiomesForGeneration(BiomeGenBase[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5)
     {
@@ -404,7 +383,7 @@ public class ManagerOWG extends WorldChunkManager
 
         for (int var7 = 0; var7 < par4 * par5; ++var7)
         {
-            par1ArrayOfBiomeGenBase[var7] = BiomeGenBase.getBiome(var6[var7]);
+            par1ArrayOfBiomeGenBase[var7] = BiomeGenBase.biomeList[var6[var7]];
         }
 
         return par1ArrayOfBiomeGenBase;
@@ -436,7 +415,7 @@ public class ManagerOWG extends WorldChunkManager
 
             for (int var8 = 0; var8 < par4 * par5; ++var8)
             {
-                par1ArrayOfBiomeGenBase[var8] = BiomeGenBase.getBiome(var7[var8]);
+                par1ArrayOfBiomeGenBase[var8] = BiomeGenBase.biomeList[var7[var8]];
             }
 
             return par1ArrayOfBiomeGenBase;

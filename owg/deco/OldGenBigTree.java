@@ -3,13 +3,11 @@ package owg.deco;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
-public class OldGenBigTree extends WorldGenAbstractTree
+public class OldGenBigTree extends WorldGenerator
 {
     static final byte field_882_a[] = {
         2, 0, 0, 1, 2, 1
@@ -128,7 +126,7 @@ public class OldGenBigTree extends WorldGenAbstractTree
         System.arraycopy(ai, 0, field_868_o, 0, k);
     }
 
-    void func_523_a(int i, int j, int k, float f, byte byte0, Block l)
+    void func_523_a(int i, int j, int k, float f, byte byte0, int l)
     {
         int i1 = (int)((double)f + 0.61799999999999999D);
         byte byte1 = field_882_a[byte0];
@@ -154,11 +152,12 @@ public class OldGenBigTree extends WorldGenAbstractTree
                 } else
                 {
                     ai1[byte2] = ai[byte2] + l1;
-                    Block i2 = worldObj.getBlock(ai1[0], ai1[1], ai1[2]);
-                    if(i2 != Blocks.air && i2 != Blocks.leaves && i2 != Blocks.leaves2)
+                    int i2 = worldObj.getBlockId(ai1[0], ai1[1], ai1[2]);
+                    if(i2 != 0 && i2 != Block.leaves.blockID)
                     {
                         l1++;
-                    } else
+                    } 
+                    else
                     {
                         worldObj.setBlock(ai1[0], ai1[1], ai1[2], l, 0, 0);
                         l1++;
@@ -209,12 +208,12 @@ public class OldGenBigTree extends WorldGenAbstractTree
         for(int i1 = j + field_869_n; l < i1; l++)
         {
             float f = func_526_b(l - j);
-            func_523_a(i, l, k, f, (byte)1, Blocks.leaves);
+            func_523_a(i, l, k, f, (byte)1, Block.leaves.blockID);
         }
 
     }
 
-    void func_522_a(int ai[], int ai1[], Block i)
+    void func_522_a(int ai[], int ai1[], int i)
     {
         int ai2[] = {
             0, 0, 0
@@ -290,18 +289,18 @@ public class OldGenBigTree extends WorldGenAbstractTree
         int ai1[] = {
             i, k, l
         };
-        func_522_a(ai, ai1, Blocks.log);
+        func_522_a(ai, ai1, Block.wood.blockID);
         if(field_871_l == 2)
         {
             ai[0]++;
             ai1[0]++;
-            func_522_a(ai, ai1, Blocks.log);
+            func_522_a(ai, ai1, Block.wood.blockID);
             ai[2]++;
             ai1[2]++;
-            func_522_a(ai, ai1, Blocks.log);
+            func_522_a(ai, ai1, Block.wood.blockID);
             ai[0]--;
             ai1[0]--;
-            func_522_a(ai, ai1, Blocks.log);
+            func_522_a(ai, ai1, Block.wood.blockID);
         }
     }
 
@@ -322,7 +321,7 @@ public class OldGenBigTree extends WorldGenAbstractTree
             int k = ai[1] - basePos[1];
             if(func_527_c(k))
             {
-                func_522_a(ai, ai2, Blocks.log);
+                func_522_a(ai, ai2, Block.wood.blockID);
             }
         }
 
@@ -383,8 +382,8 @@ public class OldGenBigTree extends WorldGenAbstractTree
 				ai3[byte1] = MathHelper.floor_double((double)ai[byte1] + (double)j * d);
 				ai3[byte2] = MathHelper.floor_double((double)ai[byte2] + (double)j * d1);
 			}
-            Block l = worldObj.getBlock(ai3[0], ai3[1], ai3[2]);
-            if(l != Blocks.air && l != Blocks.leaves && l != Blocks.leaves2)
+            int l = worldObj.getBlockId(ai3[0], ai3[1], ai3[2]);
+            if(l != 0 && l != Block.leaves.blockID)
             {
                 break;
             }
@@ -407,8 +406,8 @@ public class OldGenBigTree extends WorldGenAbstractTree
         int ai1[] = {
             basePos[0], (basePos[1] + field_878_e) - 1, basePos[2]
         };
-        Block i = worldObj.getBlock(basePos[0], basePos[1] - 1, basePos[2]);
-        if(i != Blocks.grass && i != Blocks.dirt)
+        int i = worldObj.getBlockId(basePos[0], basePos[1] - 1, basePos[2]);
+        if(i != Block.grass.blockID && i != Block.dirt.blockID)
         {
             return false;
         }

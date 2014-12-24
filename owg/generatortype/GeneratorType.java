@@ -72,12 +72,12 @@ public class GeneratorType
 
 	public WorldChunkManager getServerWorldChunkManager(World world)
     {
-		return new WorldChunkManagerHell(BiomeList.OLDplains, 0.5F);
+		return new WorldChunkManagerHell(BiomeList.OLDplains, 0.5F, 0.5F);
     }
 	
 	public WorldChunkManager getClientWorldChunkManager(World world)
     {
-		return new WorldChunkManagerHell(BiomeList.OLDplains, 0.5F);
+		return new WorldChunkManagerHell(BiomeList.OLDplains, 0.5F, 0.5F);
     }
 	
     public IChunkProvider getChunkGenerator(World world)

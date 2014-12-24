@@ -7,16 +7,14 @@ package owg.deco;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 // Referenced classes of package net.minecraft.src:
 //            WorldGenerator, World, Block, BlockLeaves, 
 //            BlockGrass
 
-public class OldGenTaiga2 extends WorldGenAbstractTree
+public class OldGenTaiga2 extends WorldGenerator
 {
 
     public OldGenTaiga2()
@@ -51,8 +49,8 @@ public class OldGenTaiga2 extends WorldGenAbstractTree
                 {
                     if(l1 >= 0 && l1 < 128)
                     {
-                        Block k3 = world.getBlock(l2, l1, j3);
-                        if(k3 != Blocks.air && k3 != Blocks.leaves)
+                        int k3 = world.getBlockId(l2, l1, j3);
+                        if(k3 != 0 && k3 != Block.leaves.blockID)
                         {
                             flag = false;
                         }
@@ -70,12 +68,12 @@ public class OldGenTaiga2 extends WorldGenAbstractTree
         {
             return false;
         }
-        Block i2 = world.getBlock(i, j - 1, k);
-        if(i2 != Blocks.grass && i2 != Blocks.dirt || j >= 128 - l - 1)
+        int i2 = world.getBlockId(i, j - 1, k);
+        if(i2 != Block.grass.blockID && i2 != Block.dirt.blockID || j >= 128 - l - 1)
         {
             return false;
         }
-        world.setBlock(i, j - 1, k, Blocks.dirt);
+        world.setBlock(i, j - 1, k, Block.dirt.blockID);
         int k2 = random.nextInt(2);
         int i3 = 1;
         boolean flag1 = false;
@@ -88,9 +86,9 @@ public class OldGenTaiga2 extends WorldGenAbstractTree
                 for(int k5 = k - k2; k5 <= k + k2; k5++)
                 {
                     int l5 = k5 - k;
-                    if((Math.abs(j5) != k2 || Math.abs(l5) != k2 || k2 <= 0) && !world.getBlock(l4, j4, k5).isOpaqueCube())
+                    if((Math.abs(j5) != k2 || Math.abs(l5) != k2 || k2 <= 0) && !Block.opaqueCubeLookup[world.getBlockId(l4, j4, k5)])
                     {
-                        world.setBlock(l4, j4, k5, Blocks.leaves, 1, 2);
+                        world.setBlock(l4, j4, k5, Block.leaves.blockID, 1, 2);
                     }
                 }
 
@@ -113,10 +111,10 @@ public class OldGenTaiga2 extends WorldGenAbstractTree
         int i4 = random.nextInt(3);
         for(int k4 = 0; k4 < l - i4; k4++)
         {
-            Block i5 = world.getBlock(i, j + k4, k);
-            if(i5 == Blocks.air || i5 == Blocks.leaves)
+            int i5 = world.getBlockId(i, j + k4, k);
+            if(i5 == 0 || i5 == Block.leaves.blockID)
             {
-                world.setBlock(i, j + k4, k, Blocks.log, 1, 2);
+                world.setBlock(i, j + k4, k, Block.wood.blockID, 1, 2);
             }
         }
 

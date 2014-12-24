@@ -9,6 +9,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.ColorizerGrass;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.SpawnListEntry;
 
 public class BiomeClassic extends BiomeGenBase
 {
@@ -19,16 +20,16 @@ public class BiomeClassic extends BiomeGenBase
         spawnableCreatureList.add(new SpawnListEntry(EntityOcelot.class, 2, 1, 1));
         spawnableCreatureList.add(new SpawnListEntry(EntityHorse.class, 2, 1, 1));
     }
-    
+
     @SideOnly(Side.CLIENT)
-    public int getBiomeGrassColor(int a, int b, int c)
+    public int getBiomeGrassColor()
     {
         return 0xABFF67;
     }
-    
+
     @SideOnly(Side.CLIENT)
-    public int getBiomeFoliageColor(int a, int b, int c)
+    public int getBiomeFoliageColor()
     {
         return 0x4FFF2B;
-    }  
+    }
 }

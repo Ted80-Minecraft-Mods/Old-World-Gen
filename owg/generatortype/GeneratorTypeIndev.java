@@ -35,15 +35,15 @@ public class GeneratorTypeIndev extends GeneratorType
     {
 		if(trySetting(0, 4) == 4) 
 		{ 
-			return new WorldChunkManagerHell(BiomeList.CLASSICsnow, 0.5F); 
+			return new WorldChunkManagerHell(BiomeList.CLASSICsnow, 0.5F, 0.5F); 
 		}
-		return new WorldChunkManagerHell(BiomeList.CLASSICnormal, 0.5F);
+		return new WorldChunkManagerHell(BiomeList.CLASSICnormal, 0.5F, 0.5F);
     }
 
 	@Override
 	public WorldChunkManager getClientWorldChunkManager(World world)
     {
-		return new WorldChunkManagerHell(BiomeList.CLASSICnormal, 0.5F);
+		return new WorldChunkManagerHell(BiomeList.CLASSICnormal, 0.5F, 0.5F);
     }
 
 	@Override

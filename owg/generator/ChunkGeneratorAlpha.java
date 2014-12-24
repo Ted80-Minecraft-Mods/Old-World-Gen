@@ -24,7 +24,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.SpawnerAnimals;
@@ -95,7 +94,7 @@ public class ChunkGeneratorAlpha implements IChunkProvider
         DungeonLoot.init(l);
     }
 
-    public void generateTerrain(int i, int j, Block blocks[], BiomeGenBase abiomegenbase[], double ad[])
+    public void generateTerrain(int i, int j, byte blocks[], BiomeGenBase abiomegenbase[], double ad[])
     {
         byte byte0 = 4;
         byte byte1 = 64;
@@ -135,23 +134,23 @@ public class ChunkGeneratorAlpha implements IChunkProvider
                             for(int k2 = 0; k2 < 4; k2++)
                             {
                                 double d17 = ad[(i1 * 4 + i2) * 16 + (j1 * 4 + k2)];
-                                Block l2 = Blocks.air;
+                                int l2 = 0;
                                 if(k1 * 8 + l1 < byte1)
                                 {
                                     if(d17 < 0.5D && k1 * 8 + l1 >= byte1 - 1)
                                     {
-                                        l2 = Blocks.ice;
+                                        l2 = Block.ice.blockID;
                                     } 
                                     else
                                     {
-                                        l2 = Blocks.water;
+                                        l2 = Block.waterStill.blockID;
                                     }
                                 }
                                 if(d15 > 0.0D)
                                 {
-                                    l2 = Blocks.stone;
+                                    l2 = Block.stone.blockID;
                                 }
-                                blocks[j2] = l2;
+                                blocks[j2] = (byte)l2;
                                 j2 += c;
                                 d15 += d16;
                             }
@@ -174,7 +173,7 @@ public class ChunkGeneratorAlpha implements IChunkProvider
 
     }
 
-    public void replaceBlocksForBiome(int i, int j, Block blocks[], BiomeGenBase abiomegenbase[])
+    public void replaceBlocksForBiome(int i, int j, byte blocks[], BiomeGenBase abiomegenbase[])
     {
         byte byte0 = 64;
         double d = 0.03125D;
@@ -190,23 +189,23 @@ public class ChunkGeneratorAlpha implements IChunkProvider
                 boolean flag1 = field_904_s[k + l * 16] + field_913_j.nextDouble() * 0.20000000000000001D > 3D;
                 int i1 = (int)(field_903_t[k + l * 16] / 3D + 3D + field_913_j.nextDouble() * 0.25D);
                 int j1 = -1;
-                Block byte1 = biomegenbase.topBlock;
-                Block byte2 = biomegenbase.fillerBlock;
+                byte byte1 = biomegenbase.topBlock;
+                byte byte2 = biomegenbase.fillerBlock;
                 for(int k1 = 127; k1 >= 0; k1--)
                 {
                     int l1 = (k * 16 + l) * 128 + k1;
                     if(k1 <= 0 + field_913_j.nextInt(5))
                     {
-                    	blocks[l1] = Blocks.bedrock;
+                    	blocks[l1] = (byte)Block.bedrock.blockID;
                         continue;
                     }
-                    Block byte3 = blocks[l1];
-                    if(byte3 == Blocks.air)
+                    byte byte3 = blocks[l1];
+                    if(byte3 == 0)
                     {
                         j1 = -1;
                         continue;
                     }
-                    if(byte3 != Blocks.stone)
+                    if(byte3 != Block.stone.blockID)
                     {
                         continue;
                     }
@@ -214,8 +213,8 @@ public class ChunkGeneratorAlpha implements IChunkProvider
                     {
                         if(i1 <= 0)
                         {
-                            byte1 = Blocks.air;
-                            byte2 = Blocks.stone;
+                            byte1 = 0;
+                            byte2 = (byte)Block.stone.blockID;
                         } else
                         if(k1 >= byte0 - 4 && k1 <= byte0 + 1)
                         {
@@ -223,24 +222,24 @@ public class ChunkGeneratorAlpha implements IChunkProvider
                             byte2 = biomegenbase.fillerBlock;
                             if(flag1)
                             {
-                                byte1 = Blocks.air;
+                                byte1 = 0;
                             }
                             if(flag1)
                             {
-                                byte2 = Blocks.gravel;
+                                byte2 = (byte)Block.gravel.blockID;
                             }
                             if(flag)
                             {
-                                byte1 = Blocks.sand;
+                                byte1 = (byte)Block.sand.blockID;
                             }
                             if(flag)
                             {
-                                byte2 = Blocks.sand;
+                                byte2 = (byte)Block.sand.blockID;
                             }
                         }
-                        if(k1 < byte0 && byte1 == Blocks.air)
+                        if(k1 < byte0 && byte1 == 0)
                         {
-                            byte1 = Blocks.flowing_water;
+                            byte1 = (byte)Block.waterStill.blockID;
                         }
                         j1 = i1;
                         if(k1 >= byte0 - 1)
@@ -273,7 +272,7 @@ public class ChunkGeneratorAlpha implements IChunkProvider
     public Chunk provideChunk(int i, int j)
     {
         field_913_j.setSeed((long)i * 0x4f9939f508L + (long)j * 0x1ef1565bd5L);
-        Block blocks[] = new Block[32768];
+        byte blocks[] = new byte[32768];
         field_4179_v = worldObj_16.getWorldChunkManager().loadBlockGeneratorData(field_4179_v, i * 16, j * 16, 16, 16);
         double ad[] = ManagerOWG.temperature;
         generateTerrain(i, j, blocks, field_4179_v, ad);
@@ -282,8 +281,8 @@ public class ChunkGeneratorAlpha implements IChunkProvider
 		
         if (mapFeaturesEnabled)
         {
-			strongholdGenerator.func_151539_a(this, worldObj_16, i, j, blocks);
-			mineshaftGenerator.func_151539_a(this, worldObj_16, i, j, blocks);
+			strongholdGenerator.generate(this, worldObj_16, i, j, blocks);
+			mineshaftGenerator.generate(this, worldObj_16, i, j, blocks);
 		}	
 		
         Chunk chunk = new Chunk(worldObj_16, blocks, i, j);
@@ -435,7 +434,7 @@ public class ChunkGeneratorAlpha implements IChunkProvider
 			int i111 = k + field_913_j.nextInt(16) + 8;
 			int l44 = field_913_j.nextInt(128);
 			int i88 = l + field_913_j.nextInt(16) + 8;
-			(new OldGenLakes(Blocks.water)).generate(worldObj_16, field_913_j, i111, l44, i88);
+			(new OldGenLakes(Block.waterStill.blockID)).generate(worldObj_16, field_913_j, i111, l44, i88);
 		}
 		if(field_913_j.nextInt(8) == 0)
 		{
@@ -444,7 +443,7 @@ public class ChunkGeneratorAlpha implements IChunkProvider
 			int j88 = l + field_913_j.nextInt(16) + 8;
 			if(i55 < 64 || field_913_j.nextInt(10) == 0)
 			{
-				(new OldGenLakes(Blocks.lava)).generate(worldObj_16, field_913_j, j111, i55, j88);
+				(new OldGenLakes(Block.lavaStill.blockID)).generate(worldObj_16, field_913_j, j111, i55, j88);
 			}
 		} 		
 		
@@ -469,7 +468,7 @@ public class ChunkGeneratorAlpha implements IChunkProvider
             int k4 = k + field_913_j.nextInt(16);
             int i7 = field_913_j.nextInt(128);
             int j9 = l + field_913_j.nextInt(16);
-            (new OldGenMinable(Blocks.dirt, 32, 1)).generate(worldObj_16, field_913_j, k4, i7, j9);
+            (new OldGenMinable(Block.dirt.blockID, 32, 1)).generate(worldObj_16, field_913_j, k4, i7, j9);
         }
 
         for(int i2 = 0; i2 < 10; i2++)
@@ -477,7 +476,7 @@ public class ChunkGeneratorAlpha implements IChunkProvider
             int l4 = k + field_913_j.nextInt(16);
             int j7 = field_913_j.nextInt(128);
             int k9 = l + field_913_j.nextInt(16);
-            (new OldGenMinable(Blocks.gravel, 32, 1)).generate(worldObj_16, field_913_j, l4, j7, k9);
+            (new OldGenMinable(Block.gravel.blockID, 32, 1)).generate(worldObj_16, field_913_j, l4, j7, k9);
         }
 
         for(int j2 = 0; j2 < 20; j2++)
@@ -485,7 +484,7 @@ public class ChunkGeneratorAlpha implements IChunkProvider
             int i5 = k + field_913_j.nextInt(16);
             int k7 = field_913_j.nextInt(128);
             int l9 = l + field_913_j.nextInt(16);
-            (new OldGenMinable(Blocks.coal_ore, 16, 1)).generate(worldObj_16, field_913_j, i5, k7, l9);
+            (new OldGenMinable(Block.oreCoal.blockID, 16, 1)).generate(worldObj_16, field_913_j, i5, k7, l9);
         }
 
         for(int k2 = 0; k2 < 20; k2++)
@@ -493,7 +492,7 @@ public class ChunkGeneratorAlpha implements IChunkProvider
             int j5 = k + field_913_j.nextInt(16);
             int l7 = field_913_j.nextInt(64);
             int i10 = l + field_913_j.nextInt(16);
-            (new OldGenMinable(Blocks.iron_ore, 8, 1)).generate(worldObj_16, field_913_j, j5, l7, i10);
+            (new OldGenMinable(Block.oreIron.blockID, 8, 1)).generate(worldObj_16, field_913_j, j5, l7, i10);
         }
 
         for(int i3 = 0; i3 < 2; i3++)
@@ -501,7 +500,7 @@ public class ChunkGeneratorAlpha implements IChunkProvider
             int k5 = k + field_913_j.nextInt(16);
             int i8 = field_913_j.nextInt(32);
             int j10 = l + field_913_j.nextInt(16);
-            (new OldGenMinable(Blocks.gold_ore, 8, 1)).generate(worldObj_16, field_913_j, k5, i8, j10);
+            (new OldGenMinable(Block.oreGold.blockID, 8, 1)).generate(worldObj_16, field_913_j, k5, i8, j10);
         }
 
         for(int j3 = 0; j3 < 8; j3++)
@@ -509,7 +508,7 @@ public class ChunkGeneratorAlpha implements IChunkProvider
             int l5 = k + field_913_j.nextInt(16);
             int j8 = field_913_j.nextInt(16);
             int k10 = l + field_913_j.nextInt(16);
-            (new OldGenMinable(Blocks.redstone_ore, 7, 1)).generate(worldObj_16, field_913_j, l5, j8, k10);
+            (new OldGenMinable(Block.oreRedstone.blockID, 7, 1)).generate(worldObj_16, field_913_j, l5, j8, k10);
         }
 
         for(int k3 = 0; k3 < 1; k3++)
@@ -517,7 +516,7 @@ public class ChunkGeneratorAlpha implements IChunkProvider
             int i6 = k + field_913_j.nextInt(16);
             int k8 = field_913_j.nextInt(16);
             int l10 = l + field_913_j.nextInt(16);
-            (new OldGenMinable(Blocks.diamond_ore, 7, 1)).generate(worldObj_16, field_913_j, i6, k8, l10);
+            (new OldGenMinable(Block.oreDiamond.blockID, 7, 1)).generate(worldObj_16, field_913_j, i6, k8, l10);
         }
 		
         d = 0.5D;
@@ -577,7 +576,7 @@ public class ChunkGeneratorAlpha implements IChunkProvider
             int j13 = k + field_913_j.nextInt(16) + 8;
             int i16 = field_913_j.nextInt(128);
             int k18 = l + field_913_j.nextInt(16) + 8;
-            (new OldGenFlowers(Blocks.yellow_flower)).generate(worldObj_16, field_913_j, j13, i16, k18);
+            (new OldGenFlowers(Block.plantYellow.blockID)).generate(worldObj_16, field_913_j, j13, i16, k18);
         }
 
         if(field_913_j.nextInt(2) == 0)
@@ -585,21 +584,21 @@ public class ChunkGeneratorAlpha implements IChunkProvider
             int k11 = k + field_913_j.nextInt(16) + 8;
             int k13 = field_913_j.nextInt(128);
             int j16 = l + field_913_j.nextInt(16) + 8;
-            (new OldGenFlowers(Blocks.red_flower)).generate(worldObj_16, field_913_j, k11, k13, j16);
+            (new OldGenFlowers(Block.plantRed.blockID)).generate(worldObj_16, field_913_j, k11, k13, j16);
         } 
         if(field_913_j.nextInt(4) == 0)
         {
             int l11 = k + field_913_j.nextInt(16) + 8;
             int l13 = field_913_j.nextInt(128);
             int k16 = l + field_913_j.nextInt(16) + 8;
-            (new OldGenFlowers(Blocks.brown_mushroom)).generate(worldObj_16, field_913_j, l11, l13, k16);
+            (new OldGenFlowers(Block.mushroomBrown.blockID)).generate(worldObj_16, field_913_j, l11, l13, k16);
         }
         if(field_913_j.nextInt(8) == 0)
         {
             int i12 = k + field_913_j.nextInt(16) + 8;
             int i14 = field_913_j.nextInt(128);
             int l16 = l + field_913_j.nextInt(16) + 8;
-            (new OldGenFlowers(Blocks.red_mushroom)).generate(worldObj_16, field_913_j, i12, i14, l16);
+            (new OldGenFlowers(Block.mushroomRed.blockID)).generate(worldObj_16, field_913_j, i12, i14, l16);
         } 
         for(int j12 = 0; j12 < 10; j12++)
         {
@@ -634,7 +633,7 @@ public class ChunkGeneratorAlpha implements IChunkProvider
             int l17 = k + field_913_j.nextInt(16) + 8;
             int j19 = field_913_j.nextInt(field_913_j.nextInt(120) + 8);
             int j20 = l + field_913_j.nextInt(16) + 8;
-            (new OldGenLiquids(Blocks.flowing_water)).generate(worldObj_16, field_913_j, l17, j19, j20);
+            (new OldGenLiquids(Block.waterMoving.blockID)).generate(worldObj_16, field_913_j, l17, j19, j20);
         }
 
         for(int j15 = 0; j15 < 20; j15++)
@@ -642,7 +641,7 @@ public class ChunkGeneratorAlpha implements IChunkProvider
             int i18 = k + field_913_j.nextInt(16) + 8;
             int k19 = field_913_j.nextInt(field_913_j.nextInt(field_913_j.nextInt(112) + 8) + 8);
             int k20 = l + field_913_j.nextInt(16) + 8;
-            (new OldGenLiquids(Blocks.flowing_lava)).generate(worldObj_16, field_913_j, i18, k19, k20);
+            (new OldGenLiquids(Block.lavaMoving.blockID)).generate(worldObj_16, field_913_j, i18, k19, k20);
         }
 
 		SpawnerAnimals.performWorldGenSpawning(worldObj_16, biomegenbase, k + 8, l + 8, 16, 16, rand2);
@@ -658,9 +657,9 @@ public class ChunkGeneratorAlpha implements IChunkProvider
                 int l20 = j18 - (l + 8);
                 int i21 = worldObj_16.getPrecipitationHeight(k15, j18);
                 double d1 = field_4178_w[l19 * 16 + l20] - ((double)(i21 - 64) / 64D) * 0.29999999999999999D;
-                if(d1 < 0.5D && i21 > 0 && i21 < 128 && worldObj_16.isAirBlock(k15, i21, j18) && worldObj_16.getBlock(k15, i21 - 1, j18).getMaterial().isSolid() && worldObj_16.getBlock(k15, i21 - 1, j18).getMaterial() != Material.ice)
+                if(d1 < 0.5D && i21 > 0 && i21 < 128 && worldObj_16.isAirBlock(k15, i21, j18) && worldObj_16.getBlockMaterial(k15, i21 - 1, j18).isSolid() && worldObj_16.getBlockMaterial(k15, i21 - 1, j18) != Material.ice)
                 {
-					worldObj_16.setBlock(k15, i21, j18, Blocks.snow_layer, 0, 2);
+					worldObj_16.setBlock(k15, i21, j18, Block.snow.blockID, 0, 2);
                 }
             }
         }
@@ -701,9 +700,9 @@ public class ChunkGeneratorAlpha implements IChunkProvider
         return var5 == null ? null : var5.getSpawnableList(par1EnumCreatureType);
     }
 	
-    public ChunkPosition func_147416_a(World par1World, String par2Str, int par3, int par4, int par5)
+    public ChunkPosition findClosestStructure(World par1World, String par2Str, int par3, int par4, int par5)
     {
-        return "Stronghold".equals(par2Str) && this.strongholdGenerator != null ? this.strongholdGenerator.func_151545_a(par1World, par3, par4, par5) : null;
+        return "Stronghold".equals(par2Str) && this.strongholdGenerator != null ? this.strongholdGenerator.getNearestInstance(par1World, par3, par4, par5) : null;
     }
 
     public int getLoadedChunkCount()
@@ -715,8 +714,8 @@ public class ChunkGeneratorAlpha implements IChunkProvider
     {
         if (mapFeaturesEnabled)
         {
-			strongholdGenerator.func_151539_a(this, worldObj_16, par1, par2, (Block[])null);
-			mineshaftGenerator.func_151539_a(this, worldObj_16, par1, par2, (Block[])null);
+			strongholdGenerator.generate(this, worldObj_16, par1, par2, (byte[])null);
+			mineshaftGenerator.generate(this, worldObj_16, par1, par2, (byte[])null);
 		}	
 	}
 

@@ -5,8 +5,6 @@ import java.util.Random;
 import owg.data.DungeonLoot;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
@@ -40,15 +38,15 @@ public class DecoSkyDungeon extends WorldGenerator
 		}
 		
 		//Build Chains
-		for(int chy1 = par4 + 5; chy1 < 70 ; chy1++) { if(!par1World.isAirBlock(par3 + 4, chy1, par5 + 4)) { break; } par1World.setBlock(par3 + 4, chy1, par5 + 4, Blocks.iron_bars); }		
-		for(int chy2 = par4 + 5; chy2 < 70 ; chy2++) { if(!par1World.isAirBlock(par3 + 4, chy2, par5 - 4)) { break; } par1World.setBlock(par3 + 4, chy2, par5 - 4, Blocks.iron_bars); }		
-		for(int chy3 = par4 + 5; chy3 < 70 ; chy3++) { if(!par1World.isAirBlock(par3 - 4, chy3, par5 + 4)) { break; } par1World.setBlock(par3 - 4, chy3, par5 + 4, Blocks.iron_bars); }		
-		for(int chy4 = par4 + 5; chy4 < 70 ; chy4++) { if(!par1World.isAirBlock(par3 - 4, chy4, par5 - 4)) { break; } par1World.setBlock(par3 - 4, chy4, par5 - 4, Blocks.iron_bars); }	
+		for(int chy1 = par4 + 5; chy1 < 70 ; chy1++) { if(!par1World.isAirBlock(par3 + 4, chy1, par5 + 4)) { break; } par1World.setBlock(par3 + 4, chy1, par5 + 4, Block.fenceIron.blockID); }		
+		for(int chy2 = par4 + 5; chy2 < 70 ; chy2++) { if(!par1World.isAirBlock(par3 + 4, chy2, par5 - 4)) { break; } par1World.setBlock(par3 + 4, chy2, par5 - 4, Block.fenceIron.blockID); }		
+		for(int chy3 = par4 + 5; chy3 < 70 ; chy3++) { if(!par1World.isAirBlock(par3 - 4, chy3, par5 + 4)) { break; } par1World.setBlock(par3 - 4, chy3, par5 + 4, Block.fenceIron.blockID); }		
+		for(int chy4 = par4 + 5; chy4 < 70 ; chy4++) { if(!par1World.isAirBlock(par3 - 4, chy4, par5 - 4)) { break; } par1World.setBlock(par3 - 4, chy4, par5 - 4, Block.fenceIron.blockID); }	
 
-		par1World.setBlock(par3 + 4, par4 + 6, par5 + 4, Blocks.mossy_cobblestone);
-		par1World.setBlock(par3 + 4, par4 + 6, par5 - 4, Blocks.mossy_cobblestone);
-		par1World.setBlock(par3 - 4, par4 + 6, par5 + 4, Blocks.mossy_cobblestone);
-		par1World.setBlock(par3 - 4, par4 + 6, par5 - 4, Blocks.mossy_cobblestone);
+		par1World.setBlock(par3 + 4, par4 + 6, par5 + 4, Block.cobblestoneMossy.blockID);
+		par1World.setBlock(par3 + 4, par4 + 6, par5 - 4, Block.cobblestoneMossy.blockID);
+		par1World.setBlock(par3 - 4, par4 + 6, par5 + 4, Block.cobblestoneMossy.blockID);
+		par1World.setBlock(par3 - 4, par4 + 6, par5 - 4, Block.cobblestoneMossy.blockID);
 		
 		//Build SkyDungeon
 		for(int x1 = par3 - 4; x1 < par3 + 5 ; x1++)
@@ -59,17 +57,17 @@ public class DecoSkyDungeon extends WorldGenerator
 				{
 					if (par2Random.nextInt(10) == 0)
 					{
-						par1World.setBlock(x1, y1, z1, Blocks.air);
+						par1World.setBlock(x1, y1, z1, 0);
 					}
 					else
 					{
 						if (par2Random.nextInt(2) != 0)
 						{
-							par1World.setBlock(x1, y1, z1, Blocks.mossy_cobblestone);
+							par1World.setBlock(x1, y1, z1, Block.cobblestoneMossy.blockID);
 						}
 						else
 						{
-							par1World.setBlock(x1, y1, z1, Blocks.cobblestone);
+							par1World.setBlock(x1, y1, z1, Block.cobblestone.blockID);
 						}
 					}
 				}
@@ -83,7 +81,7 @@ public class DecoSkyDungeon extends WorldGenerator
 			{
 				for(int z2 = par5 - 3; z2 < par5 + 4 ; z2++)
 				{
-					par1World.setBlock(x2, y2, z2, Blocks.air);
+					par1World.setBlock(x2, y2, z2, 0);
 				}
 			}
 		}
@@ -91,40 +89,40 @@ public class DecoSkyDungeon extends WorldGenerator
 		//Chests and Spawners
 		if(isEndDungeon)
 		{
-			par1World.setBlock(par3 + 2, par4 + 1, par5 - 1, Blocks.end_portal_frame, 1 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
-			par1World.setBlock(par3 + 2, par4 + 1, par5 + 0, Blocks.end_portal_frame, 1 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
-			par1World.setBlock(par3 + 2, par4 + 1, par5 + 1, Blocks.end_portal_frame, 1 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
+			par1World.setBlock(par3 + 2, par4 + 1, par5 - 1, Block.endPortalFrame.blockID, 1 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
+			par1World.setBlock(par3 + 2, par4 + 1, par5 + 0, Block.endPortalFrame.blockID, 1 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
+			par1World.setBlock(par3 + 2, par4 + 1, par5 + 1, Block.endPortalFrame.blockID, 1 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
 			
-			par1World.setBlock(par3 - 1, par4 + 1, par5 + 2, Blocks.end_portal_frame, 2 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
-			par1World.setBlock(par3 + 0, par4 + 1, par5 + 2, Blocks.end_portal_frame, 2 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
-			par1World.setBlock(par3 + 1, par4 + 1, par5 + 2, Blocks.end_portal_frame, 2 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
+			par1World.setBlock(par3 - 1, par4 + 1, par5 + 2, Block.endPortalFrame.blockID, 2 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
+			par1World.setBlock(par3 + 0, par4 + 1, par5 + 2, Block.endPortalFrame.blockID, 2 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
+			par1World.setBlock(par3 + 1, par4 + 1, par5 + 2, Block.endPortalFrame.blockID, 2 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
 			
-			par1World.setBlock(par3 - 2, par4 + 1, par5 - 1, Blocks.end_portal_frame, 3 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
-			par1World.setBlock(par3 - 2, par4 + 1, par5 + 0, Blocks.end_portal_frame, 3 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
-			par1World.setBlock(par3 - 2, par4 + 1, par5 + 1, Blocks.end_portal_frame, 3 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
+			par1World.setBlock(par3 - 2, par4 + 1, par5 - 1, Block.endPortalFrame.blockID, 3 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
+			par1World.setBlock(par3 - 2, par4 + 1, par5 + 0, Block.endPortalFrame.blockID, 3 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
+			par1World.setBlock(par3 - 2, par4 + 1, par5 + 1, Block.endPortalFrame.blockID, 3 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
 			
-			par1World.setBlock(par3 - 1, par4 + 1, par5 - 2, Blocks.end_portal_frame, 0 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
-			par1World.setBlock(par3 + 0, par4 + 1, par5 - 2, Blocks.end_portal_frame, 0 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
-			par1World.setBlock(par3 + 1, par4 + 1, par5 - 2, Blocks.end_portal_frame, 0 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
+			par1World.setBlock(par3 - 1, par4 + 1, par5 - 2, Block.endPortalFrame.blockID, 0 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
+			par1World.setBlock(par3 + 0, par4 + 1, par5 - 2, Block.endPortalFrame.blockID, 0 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
+			par1World.setBlock(par3 + 1, par4 + 1, par5 - 2, Block.endPortalFrame.blockID, 0 + (par2Random.nextFloat() > 0.9F ? 4 : 0), 0);
 
-			par1World.setBlock(par3, par4 + 6, par5, Blocks.mob_spawner);
-			TileEntityMobSpawner spawn3 = (TileEntityMobSpawner)par1World.getTileEntity(par3, par4 + 6, par5);
-			if (spawn3 != null) { spawn3.func_145881_a().setEntityName(pickMobSpawner(par2Random)); }
+			par1World.setBlock(par3, par4 + 6, par5, Block.mobSpawner.blockID);
+			TileEntityMobSpawner spawn3 = (TileEntityMobSpawner)par1World.getBlockTileEntity(par3, par4 + 6, par5);
+			if (spawn3 != null) { spawn3.getSpawnerLogic().setMobID(pickMobSpawner(par2Random)); }
 		}
 		else
 		{
-			par1World.setBlock(par3, par4 + 1, par5, Blocks.mob_spawner);
-			par1World.setBlock(par3, par4 + 3, par5, Blocks.mob_spawner);
-			par1World.setBlock(par3, par4 + 6, par5, Blocks.mob_spawner);
-			TileEntityMobSpawner spawn1 = (TileEntityMobSpawner)par1World.getTileEntity(par3, par4 + 1, par5);
-			TileEntityMobSpawner spawn2 = (TileEntityMobSpawner)par1World.getTileEntity(par3, par4 + 3, par5);
-			TileEntityMobSpawner spawn3 = (TileEntityMobSpawner)par1World.getTileEntity(par3, par4 + 6, par5);
-			if (spawn1 != null) { spawn1.func_145881_a().setEntityName(pickMobSpawner(par2Random)); }
-			if (spawn2 != null) { spawn2.func_145881_a().setEntityName(pickMobSpawner(par2Random)); }
-			if (spawn3 != null) { spawn3.func_145881_a().setEntityName(pickMobSpawner(par2Random)); }
+			par1World.setBlock(par3, par4 + 1, par5, Block.mobSpawner.blockID);
+			par1World.setBlock(par3, par4 + 3, par5, Block.mobSpawner.blockID);
+			par1World.setBlock(par3, par4 + 6, par5, Block.mobSpawner.blockID);
+			TileEntityMobSpawner spawn1 = (TileEntityMobSpawner)par1World.getBlockTileEntity(par3, par4 + 1, par5);
+			TileEntityMobSpawner spawn2 = (TileEntityMobSpawner)par1World.getBlockTileEntity(par3, par4 + 3, par5);
+			TileEntityMobSpawner spawn3 = (TileEntityMobSpawner)par1World.getBlockTileEntity(par3, par4 + 6, par5);
+			if (spawn1 != null) { spawn1.getSpawnerLogic().setMobID(pickMobSpawner(par2Random)); }
+			if (spawn2 != null) { spawn2.getSpawnerLogic().setMobID(pickMobSpawner(par2Random)); }
+			if (spawn3 != null) { spawn3.getSpawnerLogic().setMobID(pickMobSpawner(par2Random)); }
 			
-			par1World.setBlock(par3, par4 + 2, par5, Blocks.chest);
-			TileEntityChest var16 = (TileEntityChest)par1World.getTileEntity(par3, par4 + 2, par5);
+			par1World.setBlock(par3, par4 + 2, par5, Block.chest.blockID);
+			TileEntityChest var16 = (TileEntityChest)par1World.getBlockTileEntity(par3, par4 + 2, par5);
 			
 			for (int var17 = 0; var17 < 14; ++var17)
 			{

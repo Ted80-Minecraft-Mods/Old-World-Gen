@@ -28,7 +28,7 @@ public class GeneratorTypeAlpha12 extends GeneratorType
 	@Override
 	public WorldChunkManager getClientWorldChunkManager(World world)
     {
-		return new WorldChunkManagerHell(BiomeList.OLDplains, 0.5F);
+		return new WorldChunkManagerHell(BiomeList.OLDplains, 0.5F, 0.5F);
     }
 
 	@Override

@@ -3,18 +3,17 @@ package owg.deco;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class OldGenMinable extends WorldGenerator
 {
-    private Block minableBlock;
+    private int minableBlock;
     private int numberOfBlocks;
 	private int generatortype;
 
-    public OldGenMinable(Block b, int j, int type)
+    public OldGenMinable(int b, int j, int type)
     {
         minableBlock = b;
         numberOfBlocks = j;
@@ -49,7 +48,7 @@ public class OldGenMinable extends WorldGenerator
 							double d12 = (((double)i1 + 0.5D) - d6) / (d10 / 2D);
 							double d13 = (((double)j1 + 0.5D) - d7) / (d11 / 2D);
 							double d14 = (((double)k1 + 0.5D) - d8) / (d10 / 2D);
-							if(d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && world.getBlock(i1, j1, k1) == Blocks.stone)
+							if(d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && world.getBlockId(i1, j1, k1) == Block.stone.blockID)
 							{
 								world.setBlock(i1, j1, k1, minableBlock);
 							}
@@ -103,7 +102,7 @@ public class OldGenMinable extends WorldGenerator
 						for(int i3 = k1; i3 <= j2; i3++)
 						{
 							double d14 = (((double)i3 + 0.5D) - d8) / (d10 / 2D);
-							if(d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && world.getBlock(k2, l2, i3) == Blocks.stone)
+							if(d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && world.getBlockId(k2, l2, i3) == Block.stone.blockID)
 							{
 								world.setBlock(k2, l2, i3, minableBlock);
 							}

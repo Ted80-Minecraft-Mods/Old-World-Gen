@@ -19,7 +19,6 @@ import owg.noise.NoiseOctavesInfdev;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSand;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.SpawnerAnimals;
@@ -89,7 +88,7 @@ public class ChunkGeneratorInfdev implements IChunkProvider
         field_920_c = new NoiseOctavesInfdev(field_913_j, 8);
     }
 
-    public void generateTerrain(int i, int j, Block blocks[])
+    public void generateTerrain(int i, int j, byte blocks[])
     {
         byte byte0 = 4;
         byte byte1 = 64;
@@ -128,16 +127,16 @@ public class ChunkGeneratorInfdev implements IChunkProvider
                             double d16 = (d11 - d10) * d14;
                             for(int k2 = 0; k2 < 4; k2++)
                             {
-                                Block l2 = Blocks.air;
+                                int l2 = 0;
                                 if(k1 * 8 + l1 < byte1)
                                 {
-									l2 = Blocks.water;
+									l2 = Block.waterStill.blockID;
                                 }
                                 if(d15 > 0.0D)
                                 {
-                                    l2 = Blocks.stone;
+                                    l2 = Block.stone.blockID;
                                 }
-                                blocks[j2] = l2;
+                                blocks[j2] = (byte)l2;
                                 j2 += c;
                                 d15 += d16;
                             }
@@ -160,7 +159,7 @@ public class ChunkGeneratorInfdev implements IChunkProvider
 
     }
 
-    public void replaceBlocksForBiome(int i, int j, Block blocks[])
+    public void replaceBlocksForBiome(int i, int j, byte blocks[])
     {
         byte byte0 = 64;
         double d = 0.03125D;
@@ -175,23 +174,23 @@ public class ChunkGeneratorInfdev implements IChunkProvider
                 boolean flag1 = field_904_s[k + l * 16] + field_913_j.nextDouble() * 0.20000000000000001D > 3D;
                 int i1 = (int)(field_903_t[k + l * 16] / 3D + 3D + field_913_j.nextDouble() * 0.25D);
                 int j1 = -1;
-                Block byte1 = Blocks.grass;
-                Block byte2 = Blocks.dirt;
+                byte byte1 = (byte)Block.grass.blockID;
+                byte byte2 = (byte)Block.dirt.blockID;
                 for(int k1 = 127; k1 >= 0; k1--)
                 {
                     int l1 = (k * 16 + l) * 128 + k1;
                     if(k1 <= (0 + field_913_j.nextInt(6)) - 1)
                     {
-                    	blocks[l1] = Blocks.bedrock;
+                    	blocks[l1] = (byte)Block.bedrock.blockID;
                         continue;
                     }
-                    Block byte3 = blocks[l1];
-                    if(byte3 == Blocks.air)
+                    byte byte3 = blocks[l1];
+                    if(byte3 == 0)
                     {
                         j1 = -1;
                         continue;
                     }
-                    if(byte3 != Blocks.stone)
+                    if(byte3 != Block.stone.blockID)
                     {
                         continue;
                     }
@@ -199,33 +198,33 @@ public class ChunkGeneratorInfdev implements IChunkProvider
                     {
                         if(i1 <= 0)
                         {
-                            byte1 = Blocks.air;
-                            byte2 = Blocks.stone;
+                            byte1 = 0;
+                            byte2 = (byte)Block.stone.blockID;
                         } else
                         if(k1 >= byte0 - 4 && k1 <= byte0 + 1)
                         {
-                            byte1 = Blocks.grass;
-                            byte2 = Blocks.dirt;
+                            byte1 = (byte)Block.grass.blockID;
+                            byte2 = (byte)Block.dirt.blockID;
                             if(flag1)
                             {
-                                byte1 = Blocks.air;
+                                byte1 = 0;
                             }
                             if(flag1)
                             {
-                                byte2 = Blocks.gravel;
+                                byte2 = (byte)Block.gravel.blockID;
                             }
                             if(flag)
                             {
-                                byte1 = Blocks.sand;
+                                byte1 = (byte)Block.sand.blockID;
                             }
                             if(flag)
                             {
-                                byte2 = Blocks.sand;
+                                byte2 = (byte)Block.sand.blockID;
                             }
                         }
-                        if(k1 < byte0 && byte1 == Blocks.air)
+                        if(k1 < byte0 && byte1 == 0)
                         {
-                            byte1 = Blocks.flowing_water;
+                            byte1 = (byte)Block.waterStill.blockID;
                         }
                         j1 = i1;
                         if(k1 >= byte0 - 1)
@@ -258,15 +257,15 @@ public class ChunkGeneratorInfdev implements IChunkProvider
     public Chunk provideChunk(int i, int j)
     {
         field_913_j.setSeed((long)i * 0x4f9939f508L + (long)j * 0x1ef1565bd5L);
-        Block blocks[] = new Block[32768];
+        byte blocks[] = new byte[32768];
         generateTerrain(i, j, blocks);
         replaceBlocksForBiome(i, j, blocks);
         field_902_u.generate(this, field_907_p, i, j, blocks);
 		
         if (mapFeaturesEnabled)
         {
-			strongholdGenerator.func_151539_a(this, field_907_p, i, j, blocks);
-			mineshaftGenerator.func_151539_a(this, field_907_p, i, j, blocks);
+			strongholdGenerator.generate(this, field_907_p, i, j, blocks);
+			mineshaftGenerator.generate(this, field_907_p, i, j, blocks);
 		}	
 		
         Chunk chunk = new Chunk(field_907_p, blocks, i, j);
@@ -428,7 +427,7 @@ public class ChunkGeneratorInfdev implements IChunkProvider
             int k4 = k + field_913_j.nextInt(16);
             int l6 = field_913_j.nextInt(128);
             int k11 = l + field_913_j.nextInt(16);
-            (new OldGenMinable(Blocks.dirt, 32, 0)).generate(field_907_p, field_913_j, k4, l6, k11);
+            (new OldGenMinable(Block.dirt.blockID, 32, 0)).generate(field_907_p, field_913_j, k4, l6, k11);
         }
 
         for(int i2 = 0; i2 < 10; i2++)
@@ -436,7 +435,7 @@ public class ChunkGeneratorInfdev implements IChunkProvider
             int l4 = k + field_913_j.nextInt(16);
             int i7 = field_913_j.nextInt(128);
             int l11 = l + field_913_j.nextInt(16);
-            (new OldGenMinable(Blocks.gravel, 32, 0)).generate(field_907_p, field_913_j, l4, i7, l11);
+            (new OldGenMinable(Block.gravel.blockID, 32, 0)).generate(field_907_p, field_913_j, l4, i7, l11);
         }
 
         for(int j2 = 0; j2 < 20; j2++)
@@ -444,7 +443,7 @@ public class ChunkGeneratorInfdev implements IChunkProvider
             int i5 = k + field_913_j.nextInt(16);
             int j7 = field_913_j.nextInt(128);
             int i12 = l + field_913_j.nextInt(16);
-            (new OldGenMinable(Blocks.coal_ore, 16, 0)).generate(field_907_p, field_913_j, i5, j7, i12);
+            (new OldGenMinable(Block.coalBlock.blockID, 16, 0)).generate(field_907_p, field_913_j, i5, j7, i12);
         }
 
         for(int k2 = 0; k2 < 20; k2++)
@@ -452,7 +451,7 @@ public class ChunkGeneratorInfdev implements IChunkProvider
             int j5 = k + field_913_j.nextInt(16);
             int k7 = field_913_j.nextInt(64);
             int j12 = l + field_913_j.nextInt(16);
-            (new OldGenMinable(Blocks.iron_ore, 8, 0)).generate(field_907_p, field_913_j, j5, k7, j12);
+            (new OldGenMinable(Block.oreIron.blockID, 8, 0)).generate(field_907_p, field_913_j, j5, k7, j12);
         }
 
         for(int i3 = 0; i3 < 2; i3++)
@@ -460,7 +459,7 @@ public class ChunkGeneratorInfdev implements IChunkProvider
             int k5 = k + field_913_j.nextInt(16);
             int l7 = field_913_j.nextInt(32);
             int k12 = l + field_913_j.nextInt(16);
-            (new OldGenMinable(Blocks.gold_ore, 8, 0)).generate(field_907_p, field_913_j, k5, l7, k12);
+            (new OldGenMinable(Block.oreGold.blockID, 8, 0)).generate(field_907_p, field_913_j, k5, l7, k12);
         }
 
         for(int j3 = 0; j3 < 8; j3++)
@@ -468,7 +467,7 @@ public class ChunkGeneratorInfdev implements IChunkProvider
             int l5 = k + field_913_j.nextInt(16);
             int i8 = field_913_j.nextInt(16);
             int l12 = l + field_913_j.nextInt(16);
-            (new OldGenMinable(Blocks.redstone_ore, 7, 0)).generate(field_907_p, field_913_j, l5, i8, l12);
+            (new OldGenMinable(Block.oreRedstone.blockID, 7, 0)).generate(field_907_p, field_913_j, l5, i8, l12);
         }
 
         for(int k3 = 0; k3 < 1; k3++)
@@ -476,7 +475,7 @@ public class ChunkGeneratorInfdev implements IChunkProvider
             int i6 = k + field_913_j.nextInt(16);
             int j8 = field_913_j.nextInt(16);
             int i13 = l + field_913_j.nextInt(16);
-            (new OldGenMinable(Blocks.diamond_ore, 7, 0)).generate(field_907_p, field_913_j, i6, j8, i13);
+            (new OldGenMinable(Block.oreDiamond.blockID, 7, 0)).generate(field_907_p, field_913_j, i6, j8, i13);
         }
 
         d = 0.5D;
@@ -508,7 +507,7 @@ public class ChunkGeneratorInfdev implements IChunkProvider
             int k13 = k + field_913_j.nextInt(16) + 8;
             int i16 = field_913_j.nextInt(128);
             int j18 = l + field_913_j.nextInt(16) + 8;
-            (new OldGenFlowers(Blocks.yellow_flower)).generate(field_907_p, field_913_j, k13, i16, j18);
+            (new OldGenFlowers(Block.plantYellow.blockID)).generate(field_907_p, field_913_j, k13, i16, j18);
         }
 
         if(field_913_j.nextInt(2) == 0)
@@ -516,7 +515,7 @@ public class ChunkGeneratorInfdev implements IChunkProvider
             int i9 = k + field_913_j.nextInt(16) + 8;
             int l13 = field_913_j.nextInt(128);
             int j16 = l + field_913_j.nextInt(16) + 8;
-            (new OldGenFlowers(Blocks.red_flower)).generate(field_907_p, field_913_j, i9, l13, j16);
+            (new OldGenFlowers(Block.plantRed.blockID)).generate(field_907_p, field_913_j, i9, l13, j16);
         }
 
         if(alpha)
@@ -526,14 +525,14 @@ public class ChunkGeneratorInfdev implements IChunkProvider
 	            int j9 = k + field_913_j.nextInt(16) + 8;
 	            int i14 = field_913_j.nextInt(128);
 	            int k16 = l + field_913_j.nextInt(16) + 8;
-	            (new OldGenFlowers(Blocks.brown_mushroom)).generate(field_907_p, field_913_j, j9, i14, k16);
+	            (new OldGenFlowers(Block.mushroomBrown.blockID)).generate(field_907_p, field_913_j, j9, i14, k16);
 	        }
 	        if(field_913_j.nextInt(8) == 0)
 	        {
 	            int k9 = k + field_913_j.nextInt(16) + 8;
 	            int j14 = field_913_j.nextInt(128);
 	            int l16 = l + field_913_j.nextInt(16) + 8;
-	            (new OldGenFlowers(Blocks.red_mushroom)).generate(field_907_p, field_913_j, k9, j14, l16);
+	            (new OldGenFlowers(Block.mushroomRed.blockID)).generate(field_907_p, field_913_j, k9, j14, l16);
 	        }
         }
         else
@@ -543,14 +542,14 @@ public class ChunkGeneratorInfdev implements IChunkProvider
 	            int j9 = k + field_913_j.nextInt(16) + 8;
 	            int i14 = field_913_j.nextInt(64);
 	            int k16 = l + field_913_j.nextInt(16) + 8;
-	            (new OldGenFlowers(Blocks.brown_mushroom)).generate(field_907_p, field_913_j, j9, i14, k16);
+	            (new OldGenFlowers(Block.mushroomBrown.blockID)).generate(field_907_p, field_913_j, j9, i14, k16);
 	        }
 	        if(field_913_j.nextInt(12) == 0)
 	        {
 	            int k9 = k + field_913_j.nextInt(16) + 8;
 	            int j14 = field_913_j.nextInt(64);
 	            int l16 = l + field_913_j.nextInt(16) + 8;
-	            (new OldGenFlowers(Blocks.red_mushroom)).generate(field_907_p, field_913_j, k9, j14, l16);
+	            (new OldGenFlowers(Block.mushroomRed.blockID)).generate(field_907_p, field_913_j, k9, j14, l16);
 	        }
         }
 
@@ -581,7 +580,7 @@ public class ChunkGeneratorInfdev implements IChunkProvider
             int i15 = k + field_913_j.nextInt(16) + 8;
             int k17 = field_913_j.nextInt(field_913_j.nextInt(120) + 8);
             int i19 = l + field_913_j.nextInt(16) + 8;
-            (new OldGenLiquids(Blocks.flowing_water)).generate(field_907_p, field_913_j, i15, k17, i19);
+            (new OldGenLiquids(Block.waterMoving.blockID)).generate(field_907_p, field_913_j, i15, k17, i19);
         }
 
         for(int k10 = 0; k10 < 20; k10++)
@@ -589,7 +588,7 @@ public class ChunkGeneratorInfdev implements IChunkProvider
             int j15 = k + field_913_j.nextInt(16) + 8;
             int l17 = field_913_j.nextInt(field_913_j.nextInt(field_913_j.nextInt(112) + 8) + 8);
             int j19 = l + field_913_j.nextInt(16) + 8;
-            (new OldGenLiquids(Blocks.flowing_lava)).generate(field_907_p, field_913_j, j15, l17, j19);
+            (new OldGenLiquids(Block.lavaMoving.blockID)).generate(field_907_p, field_913_j, j15, l17, j19);
         }
 
 		SpawnerAnimals.performWorldGenSpawning(field_907_p, biomegenbase, k + 8, l + 8, 16, 16, field_913_j);
@@ -604,13 +603,13 @@ public class ChunkGeneratorInfdev implements IChunkProvider
 
                 if (field_907_p.isBlockFreezable(sn1 + k, sn3 - 1, sn2 + l))
                 {
-                    field_907_p.setBlock(sn1 + k, sn3 - 1, sn2 + l, Blocks.ice, 0, 2);
+                    field_907_p.setBlock(sn1 + k, sn3 - 1, sn2 + l, Block.ice.blockID, 0, 2);
                 }
 
-                Block b = field_907_p.getBlock(sn1 + k, sn3 - 1, sn2 + l);
-                if (field_907_p.func_147478_e(sn1 + k, sn3, sn2 + l, false) && b != Blocks.ice && b != Blocks.water && sn3 > 63)
+                int b = field_907_p.getBlockId(sn1 + k, sn3 - 1, sn2 + l);
+                if (field_907_p.canSnowAt(sn1 + k, sn3, sn2 + l) && b != Block.ice.blockID && b != Block.waterStill.blockID && sn3 > 63)
                 {
-                    field_907_p.setBlock(sn1 + k, sn3, sn2 + l, Blocks.snow_layer, 0, 2);
+                    field_907_p.setBlock(sn1 + k, sn3, sn2 + l, Block.snow.blockID, 0, 2);
                 }
             }
         }
@@ -651,9 +650,9 @@ public class ChunkGeneratorInfdev implements IChunkProvider
         return var5 == null ? null : var5.getSpawnableList(par1EnumCreatureType);
     }
 	
-    public ChunkPosition func_147416_a(World par1World, String par2Str, int par3, int par4, int par5)
+    public ChunkPosition findClosestStructure(World par1World, String par2Str, int par3, int par4, int par5)
     {
-        return "Stronghold".equals(par2Str) && this.strongholdGenerator != null ? this.strongholdGenerator.func_151545_a(par1World, par3, par4, par5) : null;
+        return "Stronghold".equals(par2Str) && this.strongholdGenerator != null ? this.strongholdGenerator.getNearestInstance(par1World, par3, par4, par5) : null;
     }
 
     public int getLoadedChunkCount()
@@ -667,8 +666,8 @@ public class ChunkGeneratorInfdev implements IChunkProvider
     {        
 		if (mapFeaturesEnabled)
         {
-			strongholdGenerator.func_151539_a(this, field_907_p, par1, par2, (Block[])null);
-			mineshaftGenerator.func_151539_a(this, field_907_p, par1, par2, (Block[])null);
+			strongholdGenerator.generate(this, field_907_p, par1, par2, (byte[])null);
+			mineshaftGenerator.generate(this, field_907_p, par1, par2, (byte[])null);
 		}	
 	}
 }

@@ -4,7 +4,6 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -22,7 +21,7 @@ public class OldGenReed extends WorldGenerator
             int i1 = (i + random.nextInt(4)) - random.nextInt(4);
             int j1 = j;
             int k1 = (k + random.nextInt(4)) - random.nextInt(4);
-            if(!world.isAirBlock(i1, j1, k1) || world.getBlock(i1 - 1, j1 - 1, k1).getMaterial() != Material.water && world.getBlock(i1 + 1, j1 - 1, k1).getMaterial() != Material.water && world.getBlock(i1, j1 - 1, k1 - 1).getMaterial() != Material.water && world.getBlock(i1, j1 - 1, k1 + 1).getMaterial() != Material.water)
+            if(!world.isAirBlock(i1, j1, k1) || world.getBlockMaterial(i1 - 1, j1 - 1, k1) != Material.water && world.getBlockMaterial(i1 + 1, j1 - 1, k1) != Material.water && world.getBlockMaterial(i1, j1 - 1, k1 - 1) != Material.water && world.getBlockMaterial(i1, j1 - 1, k1 + 1) != Material.water)
             {
                 continue;
             }
@@ -31,7 +30,7 @@ public class OldGenReed extends WorldGenerator
             {
                 if(canBlockStay(world, i1, j1 + i2, k1))
                 {
-                    world.setBlock(i1, j1 + i2, k1, Blocks.reeds);
+                    world.setBlock(i1, j1 + i2, k1, Block.reed.blockID);
                 }
             }
 
@@ -42,27 +41,27 @@ public class OldGenReed extends WorldGenerator
     
     public boolean canBlockStay(World world, int i, int j, int k)
     {
-        Block l = world.getBlock(i, j - 1, k);
-        if(l == Blocks.reeds)
+        int l = world.getBlockId(i, j - 1, k);
+        if(l == Block.reed.blockID)
         {
             return true;
         }
-        if(l != Blocks.grass && l != Blocks.dirt)
+        if(l != Block.grass.blockID && l != Block.dirt.blockID)
         {
             return false;
         }
-        if(world.getBlock(i - 1, j - 1, k).getMaterial() == Material.water)
+        if(world.getBlockMaterial(i - 1, j - 1, k) == Material.water)
         {
             return true;
         }
-        if(world.getBlock(i + 1, j - 1, k).getMaterial() == Material.water)
+        if(world.getBlockMaterial(i + 1, j - 1, k) == Material.water)
         {
             return true;
         }
-        if(world.getBlock(i, j - 1, k - 1).getMaterial() == Material.water)
+        if(world.getBlockMaterial(i, j - 1, k - 1) == Material.water)
         {
             return true;
         }
-        return world.getBlock(i, j - 1, k + 1).getMaterial() == Material.water;
+        return world.getBlockMaterial(i, j - 1, k + 1) == Material.water;
     }
 }

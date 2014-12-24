@@ -9,15 +9,16 @@ import owg.deco.OldGenTaiga2;
 import owg.deco.OldGenTrees;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityWolf;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.ColorizerGrass;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.gen.feature.WorldGenAbstractTree;
+import net.minecraft.world.biome.SpawnListEntry;
+import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class BiomeBeta extends BiomeGenBase
 {
@@ -46,12 +47,12 @@ public class BiomeBeta extends BiomeGenBase
 		if(id == 7)
 		{
 			spawnableCreatureList.clear();
-			topBlock = Blocks.sand;
-			fillerBlock = Blocks.sand;
+			topBlock = (byte)Block.sand.blockID;
+			fillerBlock = (byte)Block.sand.blockID;
 		}
     }
     
-    public WorldGenAbstractTree func_150567_a(Random par1Random)
+    public WorldGenerator getRandomWorldGenForTrees(Random par1Random)
     {
 		if (id == 0)
 		{
@@ -102,7 +103,7 @@ public class BiomeBeta extends BiomeGenBase
     } 
 
     @SideOnly(Side.CLIENT)
-    public int getBiomeGrassColor(int p_150558_1_, int p_150558_2_, int p_150558_3_)
+    public int getBiomeGrassColor()
     {
 		if( id == 6 || id == 9 )
 		{
@@ -114,14 +115,14 @@ public class BiomeBeta extends BiomeGenBase
 		}
 		else
 		{
-			double d = MathHelper.clamp_float(getFTemp(p_150558_1_, p_150558_2_, p_150558_3_), 0.0F, 1.0F); 
+			double d = MathHelper.clamp_float(getFloatTemperature(), 0.0F, 1.0F); 
 			double d1 = MathHelper.clamp_float(getFloatRainfall(), 0.0F, 1.0F);
 			return ColorizerGrass.getGrassColor(d, d1);
 		}
     }
 
     @SideOnly(Side.CLIENT)
-    public int getBiomeFoliageColor(int p_150558_1_, int p_150558_2_, int p_150558_3_)
+    public int getBiomeFoliageColor()
     {
 		if( id == 6 || id == 9 )
 		{
@@ -133,23 +134,9 @@ public class BiomeBeta extends BiomeGenBase
 		}
 		else
 		{
-			double d = MathHelper.clamp_float(getFTemp(p_150558_1_, p_150558_2_, p_150558_3_), 0.0F, 1.0F);
+			double d = MathHelper.clamp_float(getFloatTemperature(), 0.0F, 1.0F);
 			double d1 = MathHelper.clamp_float(getFloatRainfall(), 0.0F, 1.0F);
 			return ColorizerFoliage.getFoliageColor(d, d1);
 		}
-    }    
-
-    @SideOnly(Side.CLIENT)
-    public float getFTemp(int p_150564_1_, int p_150564_2_, int p_150564_3_)
-    {
-        if (p_150564_2_ > 64)
-        {
-            float var4 = (float)temperatureNoise.func_151601_a((double)p_150564_1_ * 1.0D / 8.0D, (double)p_150564_3_ * 1.0D / 8.0D) * 4.0F;
-            return this.temperature - (var4 + (float)p_150564_2_ - 64.0F) * 0.05F / 30.0F;
-        }
-        else
-        {
-            return this.temperature;
-        }
     }
 }

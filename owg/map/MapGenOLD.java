@@ -18,7 +18,7 @@ public class MapGenOLD
         rand = new Random();
     }
 
-    public void generate(IChunkProvider ichunkprovider, World world, int i, int j, Block blocks[])
+    public void generate(IChunkProvider ichunkprovider, World world, int i, int j, byte blocks[])
     {
         int k = range;
 		worldObj = world;
@@ -56,7 +56,7 @@ public class MapGenOLD
         }
     }
     
-    protected void recursiveGenerate(World world, int i, int j, int k, int l, Block blocks[])
+    protected void recursiveGenerate(World world, int i, int j, int k, int l, byte blocks[])
     {
     }
     

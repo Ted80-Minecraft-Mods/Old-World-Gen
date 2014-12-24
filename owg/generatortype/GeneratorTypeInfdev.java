@@ -30,15 +30,15 @@ public class GeneratorTypeInfdev extends GeneratorType
     {
 		if(trySetting(0, 1) == 0) 
 		{ 
-			return new WorldChunkManagerHell(BiomeList.CLASSICnormal, 0.5F); 
+			return new WorldChunkManagerHell(BiomeList.CLASSICnormal, 0.5F, 0.5F); 
 		}
-		return new WorldChunkManagerHell(BiomeList.CLASSICsnow, 0.5F); 
+		return new WorldChunkManagerHell(BiomeList.CLASSICsnow, 0.5F, 0.5F); 
     }
 
 	@Override
 	public WorldChunkManager getClientWorldChunkManager(World world)
     {
-		return new WorldChunkManagerHell(BiomeList.CLASSICnormal, 0.5F);
+		return new WorldChunkManagerHell(BiomeList.CLASSICnormal, 0.5F, 0.5F);
     }
 
 	@Override

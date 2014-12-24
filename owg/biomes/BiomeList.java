@@ -36,19 +36,19 @@ public class BiomeList
 		
 		CLASSICnormal = (new BiomeClassic(ConfigOWG.biomeIDs[10])).setColor(353825).setBiomeName("owg_Classic");
 		CLASSICsnow = (new BiomeClassic(ConfigOWG.biomeIDs[11])).setColor(353825).setBiomeName("owg_Classic_Snow").setEnableSnow().setTemperatureRainfall(0.0F, 0.5F);
+
+		BiomeDictionary.registerBiomeType(OLDdesert, Type.DESERT, Type.WASTELAND);
+		BiomeDictionary.registerBiomeType(OLDforest, Type.FOREST);
+		BiomeDictionary.registerBiomeType(OLDplains, Type.PLAINS, Type.MOUNTAIN, Type.HILLS);
+		BiomeDictionary.registerBiomeType(OLDrainforest, Type.JUNGLE, Type.FOREST, Type.SWAMP);
+		BiomeDictionary.registerBiomeType(OLDsavanna, Type.DESERT);
+		BiomeDictionary.registerBiomeType(OLDseasonalForest, Type.FOREST);
+		BiomeDictionary.registerBiomeType(OLDshrubland, Type.DESERT, Type.PLAINS);
+		BiomeDictionary.registerBiomeType(OLDswampland, Type.SWAMP);
+		BiomeDictionary.registerBiomeType(OLDtaiga, Type.FROZEN, Type.FOREST);
+		BiomeDictionary.registerBiomeType(OLDtundra, Type.FROZEN, Type.PLAINS, Type.MOUNTAIN);
 		
-		BiomeDictionary.registerBiomeType(OLDdesert, Type.HOT, Type.SPARSE, Type.DRY, Type.SANDY);
-		BiomeDictionary.registerBiomeType(OLDforest, Type.DENSE, Type.FOREST);
-		BiomeDictionary.registerBiomeType(OLDplains, Type.SPARSE, Type.PLAINS, Type.MOUNTAIN);
-		BiomeDictionary.registerBiomeType(OLDrainforest, Type.DENSE, Type.WET, Type.JUNGLE, Type.FOREST, Type.SWAMP);
-		BiomeDictionary.registerBiomeType(OLDsavanna, Type.HOT, Type.SPARSE, Type.SAVANNA);
-		BiomeDictionary.registerBiomeType(OLDseasonalForest, Type.DENSE, Type.FOREST);
-		BiomeDictionary.registerBiomeType(OLDshrubland, Type.HOT, Type.SPARSE, Type.DRY, Type.PLAINS);
-		BiomeDictionary.registerBiomeType(OLDswampland, Type.DENSE, Type.WET, Type.SWAMP);
-		BiomeDictionary.registerBiomeType(OLDtaiga, Type.COLD, Type.DENSE, Type.CONIFEROUS, Type.FOREST, Type.SNOWY);
-		BiomeDictionary.registerBiomeType(OLDtundra, Type.COLD, Type.SPARSE, Type.PLAINS, Type.MOUNTAIN, Type.SNOWY);
-		
-		BiomeDictionary.registerBiomeType(CLASSICnormal, Type.HOT, Type.PLAINS);
-		BiomeDictionary.registerBiomeType(CLASSICsnow, Type.COLD, Type.SNOWY);
+		BiomeDictionary.registerBiomeType(CLASSICnormal, Type.DESERT, Type.PLAINS);
+		BiomeDictionary.registerBiomeType(CLASSICsnow, Type.FROZEN);
 	}
 }

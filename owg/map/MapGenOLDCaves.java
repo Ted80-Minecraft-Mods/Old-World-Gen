@@ -7,7 +7,6 @@ package owg.map;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.MapGenBase;
@@ -23,13 +22,13 @@ public class MapGenOLDCaves extends MapGenOLD
     {
     }
 
-    protected void func_870_a(int i, int j, Block[] blocks, double d, double d1, 
+    protected void func_870_a(int i, int j, byte[] blocks, double d, double d1, 
             double d2)
     {
         releaseEntitySkin(i, j, blocks, d, d1, d2, 1.0F + rand.nextFloat() * 6F, 0.0F, 0.0F, -1, -1, 0.5D);
     }
 
-    protected void releaseEntitySkin(int i, int j, Block[] blocks, double d, double d1, 
+    protected void releaseEntitySkin(int i, int j, byte[] blocks, double d, double d1, 
             double d2, float f, float f1, float f2, int k, int l, 
             double d3)
     {
@@ -137,7 +136,7 @@ public class MapGenOLDCaves extends MapGenOLD
                         {
                             continue;
                         }
-                        if(blocks[j3] == Blocks.flowing_water || blocks[j3] == Blocks.water)
+                        if(blocks[j3] == Block.waterMoving.blockID || blocks[j3] == Block.waterStill.blockID)
                         {
                             flag2 = true;
                         }
@@ -178,23 +177,24 @@ label0:
                         double d14 = (((double)i4 + 0.5D) - d1) / d7;
                         if(d14 > -0.69999999999999996D && d12 * d12 + d14 * d14 + d13 * d13 < 1.0D)
                         {
-                        	Block byte0 = blocks[l3];
+                        	byte byte0 = blocks[l3];
                             
-                            if(byte0 == Blocks.grass)
+                            if(byte0 == Block.grass.blockID)
                             {
                                 flag3 = true;
                             }
-                            if(byte0 == Blocks.stone || byte0 == Blocks.dirt || byte0 == Blocks.grass)
+                            if(byte0 == Block.stone.blockID || byte0 == Block.dirt.blockID || byte0 == Block.grass.blockID)
                             {
                                 if(i4 < 10)
                                 {
-                                	blocks[l3] = Blocks.flowing_lava;
-                                } else
+                                	blocks[l3] = (byte)Block.lavaMoving.blockID;
+                                } 
+                                else
                                 {
-                                	blocks[l3] = Blocks.air;
-                                    if(flag3 && blocks[l3 - 1] == Blocks.dirt)
+                                	blocks[l3] = 0;
+                                    if(flag3 && blocks[l3 - 1] == Block.dirt.blockID)
                                     {
-                                    	blocks[l3 - 1] = Blocks.grass;
+                                    	blocks[l3 - 1] = (byte)Block.grass.blockID;
                                     }
                                 }
                             }
@@ -214,7 +214,7 @@ label0:
 
     }
 
-    protected void recursiveGenerate(World world, int i, int j, int k, int l, Block[] blocks)
+    protected void recursiveGenerate(World world, int i, int j, int k, int l, byte[] blocks)
     {
         int i1 = rand.nextInt(rand.nextInt(rand.nextInt(40) + 1) + 1);
         if(rand.nextInt(15) != 0)

@@ -7,7 +7,6 @@ package owg.deco;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -16,41 +15,41 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class OldGenLiquids extends WorldGenerator
 {
-    private Block liquidBlockId;
+    private int liquidBlockId;
 
-    public OldGenLiquids(Block i)
+    public OldGenLiquids(int i)
     {
         liquidBlockId = i;
     }
 
     public boolean generate(World world, Random random, int i, int j, int k)
     {
-        if(world.getBlock(i, j + 1, k) != Blocks.stone)
+        if(world.getBlockId(i, j + 1, k) != Block.stone.blockID)
         {
             return false;
         }
-        if(world.getBlock(i, j - 1, k) != Blocks.stone)
+        if(world.getBlockId(i, j - 1, k) != Block.stone.blockID)
         {
             return false;
         }
-        if(world.getBlock(i, j, k) != Blocks.air && world.getBlock(i, j, k) != Blocks.stone)
+        if(world.getBlockId(i, j, k) != 0 && world.getBlockId(i, j, k) != Block.stone.blockID)
         {
             return false;
         }
         int l = 0;
-        if(world.getBlock(i - 1, j, k) == Blocks.stone)
+        if(world.getBlockId(i - 1, j, k) == Block.stone.blockID)
         {
             l++;
         }
-        if(world.getBlock(i + 1, j, k) == Blocks.stone)
+        if(world.getBlockId(i + 1, j, k) == Block.stone.blockID)
         {
             l++;
         }
-        if(world.getBlock(i, j, k - 1) == Blocks.stone)
+        if(world.getBlockId(i, j, k - 1) == Block.stone.blockID)
         {
             l++;
         }
-        if(world.getBlock(i, j, k + 1) == Blocks.stone)
+        if(world.getBlockId(i, j, k + 1) == Block.stone.blockID)
         {
             l++;
         }
@@ -75,7 +74,7 @@ public class OldGenLiquids extends WorldGenerator
         {
             world.setBlock(i, j, k, liquidBlockId);
             world.scheduledUpdatesAreImmediate = true;
-            liquidBlockId.updateTick(world, i, j, k, random);
+            Block.blocksList[liquidBlockId].updateTick(world, i, j, k, random);
             world.scheduledUpdatesAreImmediate = false;
         }
         return true;

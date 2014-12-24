@@ -4,20 +4,19 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class OldGenClay extends WorldGenerator
 {
-    private Block clayBlock;
+    private int clayBlock;
     private int numberOfBlocks;
 	private int generatortype;
 	
     public OldGenClay(int i, int type)
     {
-        clayBlock = Blocks.clay;
+        clayBlock = Block.blockClay.blockID;
         numberOfBlocks = i;
 		generatortype = type;
     }
@@ -26,7 +25,7 @@ public class OldGenClay extends WorldGenerator
     {
 		if(generatortype == 0 || generatortype == 1)
 		{
-			if (world.getBlock(i, j, k).getMaterial() != Material.water)
+			if (world.getBlockMaterial(i, j, k) != Material.water)
 			{
 				return false;
 			}
@@ -58,8 +57,8 @@ public class OldGenClay extends WorldGenerator
 							{
 								continue;
 							}
-							Block l1 = world.getBlock(i1, j1, k1);
-							if(l1 == Blocks.sand)
+							int l1 = world.getBlockId(i1, j1, k1);
+							if(l1 == Block.sand.blockID)
 							{
 								world.setBlock(i1, j1, k1, clayBlock, 0, 0);
 							}
@@ -75,7 +74,7 @@ public class OldGenClay extends WorldGenerator
 		}
 		else if(generatortype == 2)
 		{
-			if (world.getBlock(i, j, k).getMaterial() != Material.water)
+			if (world.getBlockMaterial(i, j, k) != Material.water)
 			{
 				return false;
 			}
@@ -113,8 +112,8 @@ public class OldGenClay extends WorldGenerator
 							{
 								continue;
 							}
-							Block j3 = world.getBlock(k2, l2, i3);
-							if(j3 == Blocks.sand)
+							int j3 = world.getBlockId(k2, l2, i3);
+							if(j3 == Block.sand.blockID)
 							{
 								world.setBlock(k2, l2, i3, clayBlock, 0, 0);
 							}
@@ -164,8 +163,8 @@ public class OldGenClay extends WorldGenerator
 							{
 								continue;
 							}
-							Block j3 = world.getBlock(k2, l2, i3);
-							if(j3 == Blocks.sand)
+							int j3 = world.getBlockId(k2, l2, i3);
+							if(j3 == Block.sand.blockID)
 							{
 								world.setBlock(k2, l2, i3, clayBlock, 0, 0);
 							}

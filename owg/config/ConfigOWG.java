@@ -1,7 +1,7 @@
 package owg.config;
 
+import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.common.config.Configuration;
 
 public class ConfigOWG 
 {

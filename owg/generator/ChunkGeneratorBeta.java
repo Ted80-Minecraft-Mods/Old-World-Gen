@@ -21,11 +21,9 @@ import owg.map.MapGenOLDCaves;
 import owg.noise.NoiseOctavesBeta;
 import owg.world.ManagerOWG;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFalling;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.SpawnerAnimals;
@@ -56,7 +54,6 @@ public class ChunkGeneratorBeta implements IChunkProvider
     public NoiseOctavesBeta field_922_a;
     public NoiseOctavesBeta field_921_b;
     public NoiseOctavesBeta mobSpawnerNoise;
-    private NoiseGeneratorPerlin field_147430_m;
 	
     private World worldObj;
     private final boolean mapFeaturesEnabled;
@@ -107,12 +104,11 @@ public class ChunkGeneratorBeta implements IChunkProvider
         field_922_a = new NoiseOctavesBeta(rand, 10);
         field_921_b = new NoiseOctavesBeta(rand, 16);
         mobSpawnerNoise = new NoiseOctavesBeta(rand, 8);
-        field_147430_m = new NoiseGeneratorPerlin(this.rand, 4);
         
         DungeonLoot.init(l);
     }
 
-    public void generateTerrain(int i, int j, Block[] blocks, BiomeGenBase abiomegenbase[], double ad[])
+    public void generateTerrain(int i, int j, byte[] blocks, BiomeGenBase abiomegenbase[], double ad[])
     {	
         byte byte0 = 4;
         byte byte1 = 64;
@@ -152,21 +148,21 @@ public class ChunkGeneratorBeta implements IChunkProvider
                             for(int k2 = 0; k2 < 4; k2++)
                             {
                                 double d17 = ad[(i1 * 4 + i2) * 16 + (j1 * 4 + k2)];
-                                Block l2 = Blocks.air;
+                                byte l2 = 0;
                                 if(k1 * 8 + l1 < byte1)
                                 {
                                     if(d17 < 0.5D && k1 * 8 + l1 >= byte1 - 1 && biomeSettings == 0)
                                     {
-                                        l2 = Blocks.ice;
+                                        l2 = (byte)Block.ice.blockID;
                                     } 
                                     else
                                     {
-                                        l2 = Blocks.water;
+                                        l2 = (byte)Block.waterStill.blockID;
                                     }
                                 }
                                 if(d15 > 0.0D)
                                 {
-                                    l2 = Blocks.stone;
+                                    l2 = (byte)Block.stone.blockID;
                                 }
                                 blocks[j2] = l2;
                                 j2 += c;
@@ -191,136 +187,98 @@ public class ChunkGeneratorBeta implements IChunkProvider
 
     }
 
-    public void replaceBlocksForBiome(int i, int j, Block[] blocks, byte[] metadata, BiomeGenBase abiomegenbase[])
+    public void replaceBlocksForBiome(int i, int j, byte[] blocks, byte[] metadata, BiomeGenBase abiomegenbase[])
     {
-    	if(biomeSettings > 0)
-    	{
-            //double d0 = 0.03125D;
-            stoneNoise = field_147430_m.func_151599_a(stoneNoise, (double)(i * 16), (double)(j * 16), 16, 16, 0.0625D, 0.0625D, 1.0D);
-	        //stoneNoise = field_908_o.generateNoiseOctaves(stoneNoise, i * 16, j * 16, 0.0D, 16, 16, 1, 0.03125D * 2D, 0.03125D * 2D, 0.03125D * 2D);
-	        int l, m;
-	        for(int k = 0; k < 16; k++)
-	        {
-	            for(l = 0; l < 16; l++)
-	            {
-	            	//THIS IS THE SHITTIEST SOLUTION EVER, DEAL WITH IT!
-	            	
-	            	for(m = 0; m < 256; m++)
-	            	{
-	            		if(m < 128)
-	            		{
-	            			tempBlocks[(l * 16 + k) * 256 + m] = blocks[(l * 16 + k) * 128 + m];
-	            		}
-	            		else
-	            		{
-	            			tempBlocks[m] = Blocks.air;
-	            		}
-	            		tempMetadata[(l * 16 + k) * 256 + m] = 0;
-	            	}
-	            	
-	            	abiomegenbase[k + l * 16].genTerrainBlocks(worldObj, rand, tempBlocks, tempMetadata, i * 16 + k, j * 16 + l, stoneNoise[l + k * 16]);
-	            	
-	            	for(m = 0; m < 128; m++)
-	            	{
-	            		blocks[(l * 16 + k) * 128 + m] = tempBlocks[(l * 16 + k) * 256 + m];
-	            		metadata[(l * 16 + k) * 128 + m] = tempMetadata[(l * 16 + k) * 256 + m];
-	            	}
-	            }
-	        }
-    	}
-    	else
-    	{
-	        byte byte0 = 64;
-	        double d = 0.03125D;
-	        sandNoise = field_909_n.generateNoiseOctaves(sandNoise, i * 16, j * 16, 0.0D, 16, 16, 1, d, d, 1.0D);
-	        gravelNoise = field_909_n.generateNoiseOctaves(gravelNoise, i * 16, 109.0134D, j * 16, 16, 1, 16, d, 1.0D, d);
-	        stoneNoise = field_908_o.generateNoiseOctaves(stoneNoise, i * 16, j * 16, 0.0D, 16, 16, 1, d * 2D, d * 2D, d * 2D);
-	        for(int k = 0; k < 16; k++)
-	        {
-	            for(int l = 0; l < 16; l++)
-	            {
-	                BiomeGenBase biomegenbase = abiomegenbase[k + l * 16];
+        byte byte0 = 64;
+        double d = 0.03125D;
+        sandNoise = field_909_n.generateNoiseOctaves(sandNoise, i * 16, j * 16, 0.0D, 16, 16, 1, d, d, 1.0D);
+        gravelNoise = field_909_n.generateNoiseOctaves(gravelNoise, i * 16, 109.0134D, j * 16, 16, 1, 16, d, 1.0D, d);
+        stoneNoise = field_908_o.generateNoiseOctaves(stoneNoise, i * 16, j * 16, 0.0D, 16, 16, 1, d * 2D, d * 2D, d * 2D);
+        for(int k = 0; k < 16; k++)
+        {
+            for(int l = 0; l < 16; l++)
+            {
+                BiomeGenBase biomegenbase = abiomegenbase[k + l * 16];
 
-	                boolean flag = sandNoise[k + l * 16] + rand.nextDouble() * 0.20000000000000001D > 0.0D;
-	                boolean flag1 = gravelNoise[k + l * 16] + rand.nextDouble() * 0.20000000000000001D > 3D;
-	                int i1 = (int)(stoneNoise[k + l * 16] / 3D + 3D + rand.nextDouble() * 0.25D);
-	                int j1 = -1;
-	                Block byte1 = biomegenbase.topBlock;
-	                Block byte2 = biomegenbase.fillerBlock;
-	                for(int k1 = 127; k1 >= 0; k1--)
-	                {
-	                    int l1 = (l * 16 + k) * 128 + k1;
-	                    if(k1 <= 0 + rand.nextInt(5))
-	                    {
-	                    	blocks[l1] = Blocks.bedrock;
-	                        continue;
-	                    }
-	                    Block byte3 = blocks[l1];
-	                    if(byte3 == Blocks.air)
-	                    {
-	                        j1 = -1;
-	                        continue;
-	                    }
-	                    if(byte3 != Blocks.stone)
-	                    {
-	                        continue;
-	                    }
-	                    if(j1 == -1)
-	                    {
-	                        if(i1 <= 0)
-	                        {
-	                            byte1 =	Blocks.air;
-	                            byte2 = Blocks.stone;
-	                        } else
-	                        if(k1 >= byte0 - 4 && k1 <= byte0 + 1)
-	                        {
-	                            byte1 = biomegenbase.topBlock;
-	                            byte2 = biomegenbase.fillerBlock;
-	                            if(flag1)
-	                            {
-	                                byte1 = Blocks.air;
-	                            }
-	                            if(flag1)
-	                            {
-	                                byte2 = Blocks.gravel;
-	                            }
-	                            if(flag)
-	                            {
-	                                byte1 = Blocks.sand;
-	                            }
-	                            if(flag)
-	                            {
-	                                byte2 = Blocks.sand;
-	                            }
-	                        }
-	                        if(k1 < byte0 && byte1 == Blocks.air)
-	                        {
-	                            byte1 = Blocks.water;
-	                        }
-	                        j1 = i1;
-	                        if(k1 >= byte0 - 1)
-	                        {
-	                        	blocks[l1] = byte1;
-	                        } else
-	                        {
-	                        	blocks[l1] = byte2;
-	                        }
-	                        continue;
-	                    }
-	                    if(j1 <= 0)
-	                    {
-	                        continue;
-	                    }
-	                    j1--;
-	                    blocks[l1] = byte2;
-	                    if(j1 == 0 && byte2 == Blocks.sand)
-	                    {
-	                        j1 = rand.nextInt(4);
-	                        byte2 = Blocks.sandstone;
-	                    }
-	                }
-            	}
-            }
+                boolean flag = sandNoise[k + l * 16] + rand.nextDouble() * 0.20000000000000001D > 0.0D;
+                boolean flag1 = gravelNoise[k + l * 16] + rand.nextDouble() * 0.20000000000000001D > 3D;
+                int i1 = (int)(stoneNoise[k + l * 16] / 3D + 3D + rand.nextDouble() * 0.25D);
+                int j1 = -1;
+                byte byte1 = biomegenbase.topBlock;
+                byte byte2 = biomegenbase.fillerBlock;
+                for(int k1 = 127; k1 >= 0; k1--)
+                {
+                    int l1 = (l * 16 + k) * 128 + k1;
+                    if(k1 <= 0 + rand.nextInt(5))
+                    {
+                    	blocks[l1] = (byte)Block.bedrock.blockID;
+                        continue;
+                    }
+                    byte byte3 = blocks[l1];
+                    if(byte3 == 0)
+                    {
+                        j1 = -1;
+                        continue;
+                    }
+                    if(byte3 != Block.stone.blockID)
+                    {
+                        continue;
+                    }
+                    if(j1 == -1)
+                    {
+                        if(i1 <= 0)
+                        {
+                            byte1 =	0;
+                            byte2 = (byte)Block.stone.blockID;
+                        } 
+                        else if(k1 >= byte0 - 4 && k1 <= byte0 + 1 && biomeSettings == 0)
+                        {
+                            byte1 = biomegenbase.topBlock;
+                            byte2 = biomegenbase.fillerBlock;
+                            if(flag1)
+                            {
+                                byte1 = 0;
+                            }
+                            if(flag1)
+                            {
+                                byte2 = (byte)Block.gravel.blockID;
+                            }
+                            if(flag)
+                            {
+                                byte1 = (byte)Block.sand.blockID;
+                            }
+                            if(flag)
+                            {
+                                byte2 = (byte)Block.sand.blockID;
+                            }
+                        }
+                        if(k1 < byte0 && byte1 == 0)
+                        {
+                            byte1 = (byte)Block.waterStill.blockID;
+                        }
+                        j1 = i1;
+                        if(k1 >= byte0 - 1)
+                        {
+                        	blocks[l1] = byte1;
+                        } else
+                        {
+                        	blocks[l1] = byte2;
+                        }
+                        continue;
+                    }
+                    if(j1 <= 0)
+                    {
+                        continue;
+                    }
+                    j1--;
+                    blocks[l1] = byte2;
+                    if(j1 == 0 && byte2 == Block.sand.blockID)
+                    {
+                        j1 = rand.nextInt(4);
+                        byte2 = (byte)Block.sandStone.blockID;
+                    }
+                }
+        	}
         }
     }
 
@@ -332,7 +290,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
     public Chunk provideChunk(int i, int j)
     {
         rand.setSeed((long)i * 0x4f9939f508L + (long)j * 0x1ef1565bd5L);
-        Block[] blocks = new Block[32768];
+        byte[] blocks = new byte[32768];
         byte[] metadata = new byte[32768];
         biomesForGeneration = worldObj.getWorldChunkManager().loadBlockGeneratorData(biomesForGeneration, i * 16, j * 16, 16, 16);
         double ad[] = ManagerOWG.temperature;
@@ -343,8 +301,8 @@ public class ChunkGeneratorBeta implements IChunkProvider
 		
         if (mapFeaturesEnabled)
         {
-			strongholdGenerator.func_151539_a(this, worldObj, i, j, blocks);
-			mineshaftGenerator.func_151539_a(this, worldObj, i, j, blocks);
+			strongholdGenerator.generate(this, worldObj, i, j, blocks);
+			mineshaftGenerator.generate(this, worldObj, i, j, blocks);
 		}	
 		
         Chunk chunk = new Chunk(worldObj, blocks, metadata, i, j);
@@ -485,7 +443,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
     {
     	if(biomeSettings == 0)
     	{
-	        BlockFalling.fallInstantly = true;
+	        BlockSand.fallInstantly = true;
 			int k = i * 16;
 			int l = j * 16;
 			BiomeGenBase biomegenbase = worldObj.getWorldChunkManager().getBiomeGenAt(k + 16, l + 16);
@@ -507,7 +465,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
 				int i1 = k + rand.nextInt(16) + 8;
 				int l4 = rand.nextInt(128);
 				int i8 = l + rand.nextInt(16) + 8;
-				(new OldGenLakes(Blocks.water)).generate(worldObj, rand, i1, l4, i8);
+				(new OldGenLakes(Block.waterStill.blockID)).generate(worldObj, rand, i1, l4, i8);
 			}
 			if(rand.nextInt(8) == 0) 
 			{
@@ -516,7 +474,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
 				int j8 = l + rand.nextInt(16) + 8;
 				if(i5 < 64 || rand.nextInt(10) == 0)
 				{
-					(new OldGenLakes(Blocks.lava)).generate(worldObj, rand, j1, i5, j8);
+					(new OldGenLakes(Block.lavaStill.blockID)).generate(worldObj, rand, j1, i5, j8);
 				}
 			} 
 			for(int k1 = 0; k1 < 8; k1++) //GOOD
@@ -540,7 +498,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
 				int l5 = k + rand.nextInt(16);
 				int i9 = rand.nextInt(128);
 				int l11 = l + rand.nextInt(16);
-				(new OldGenMinable(Blocks.dirt, 32, 2)).generate(worldObj, rand, l5, i9, l11);
+				(new OldGenMinable(Block.dirt.blockID, 32, 2)).generate(worldObj, rand, l5, i9, l11);
 			}
 	
 			for(int k2 = 0; k2 < 10; k2++) //GOOD
@@ -548,7 +506,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
 				int i6 = k + rand.nextInt(16);
 				int j9 = rand.nextInt(128);
 				int i12 = l + rand.nextInt(16);
-				(new OldGenMinable(Blocks.gravel, 32, 2)).generate(worldObj, rand, i6, j9, i12);
+				(new OldGenMinable(Block.gravel.blockID, 32, 2)).generate(worldObj, rand, i6, j9, i12);
 			}
 	
 			for(int i3 = 0; i3 < 20; i3++) //GOOD
@@ -556,7 +514,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
 				int j6 = k + rand.nextInt(16);
 				int k9 = rand.nextInt(128);
 				int j12 = l + rand.nextInt(16);
-				(new OldGenMinable(Blocks.coal_ore, 16, 2)).generate(worldObj, rand, j6, k9, j12);
+				(new OldGenMinable(Block.coalBlock.blockID, 16, 2)).generate(worldObj, rand, j6, k9, j12);
 			}
 	
 			for(int j3 = 0; j3 < 20; j3++) //GOOD
@@ -564,7 +522,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
 				int k6 = k + rand.nextInt(16);
 				int l9 = rand.nextInt(64);
 				int k12 = l + rand.nextInt(16);
-				(new OldGenMinable(Blocks.iron_ore, 8, 2)).generate(worldObj, rand, k6, l9, k12);
+				(new OldGenMinable(Block.oreIron.blockID, 8, 2)).generate(worldObj, rand, k6, l9, k12);
 			}
 	
 			for(int k3 = 0; k3 < 2; k3++) //GOOD
@@ -572,7 +530,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
 				int l6 = k + rand.nextInt(16);
 				int i10 = rand.nextInt(32);
 				int l12 = l + rand.nextInt(16);
-				(new OldGenMinable(Blocks.gold_ore, 8, 2)).generate(worldObj, rand, l6, i10, l12);
+				(new OldGenMinable(Block.oreGold.blockID, 8, 2)).generate(worldObj, rand, l6, i10, l12);
 			}
 	
 			for(int l3 = 0; l3 < 8; l3++) //GOOD
@@ -580,7 +538,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
 				int i7 = k + rand.nextInt(16);
 				int j10 = rand.nextInt(16);
 				int i13 = l + rand.nextInt(16);
-				(new OldGenMinable(Blocks.redstone_ore, 7, 2)).generate(worldObj, rand, i7, j10, i13);
+				(new OldGenMinable(Block.oreRedstone.blockID, 7, 2)).generate(worldObj, rand, i7, j10, i13);
 			}
 	
 			for(int i4 = 0; i4 < 1; i4++) //GOOD
@@ -588,7 +546,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
 				int j7 = k + rand.nextInt(16);
 				int k10 = rand.nextInt(16);
 				int j13 = l + rand.nextInt(16);
-				(new OldGenMinable(Blocks.diamond_ore, 7, 2)).generate(worldObj, rand, j7, k10, j13);
+				(new OldGenMinable(Block.oreDiamond.blockID, 7, 2)).generate(worldObj, rand, j7, k10, j13);
 			}
 	
 			for(int j4 = 0; j4 < 1; j4++) //GOOD
@@ -596,7 +554,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
 				int k7 = k + rand.nextInt(16);
 				int l10 = rand.nextInt(16) + rand.nextInt(16);
 				int k13 = l + rand.nextInt(16);
-				(new OldGenMinable(Blocks.lapis_ore, 6, 2)).generate(worldObj, rand, k7, l10, k13);
+				(new OldGenMinable(Block.oreLapis.blockID, 6, 2)).generate(worldObj, rand, k7, l10, k13);
 			}
 			
 			d = 0.5D;
@@ -638,7 +596,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
 			{
 				int l13 = k + rand.nextInt(16) + 8;
 				int j14 = l + rand.nextInt(16) + 8;
-				WorldGenerator worldgenerator = biomegenbase.func_150567_a(rand);
+				WorldGenerator worldgenerator = biomegenbase.getRandomWorldGenForTrees(rand);
 				worldgenerator.setScale(1.0D, 1.0D, 1.0D);
 				worldgenerator.generate(worldObj, rand, l13, worldObj.getHeightValue(l13, j14), j14);
 			}
@@ -665,7 +623,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
 				int k14 = k + rand.nextInt(16) + 8;
 				int l16 = rand.nextInt(128);
 				int k19 = l + rand.nextInt(16) + 8;
-				(new OldGenFlowers(Blocks.yellow_flower)).generate(worldObj, rand, k14, l16, k19);
+				(new OldGenFlowers(Block.plantYellow.blockID)).generate(worldObj, rand, k14, l16, k19);
 			}
 	
 			byte byte1 = 0;
@@ -699,7 +657,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
 				int l19 = k + rand.nextInt(16) + 8;
 				int k22 = rand.nextInt(128);
 				int j24 = l + rand.nextInt(16) + 8;
-				(new OldGenTallGrass(Blocks.tallgrass, byte2)).generate(worldObj, rand, l19, k22, j24);
+				(new OldGenTallGrass(Block.tallGrass.blockID, byte2)).generate(worldObj, rand, l19, k22, j24);
 			}
 			
 			byte1 = 0;
@@ -712,7 +670,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
 				int i17 = k + rand.nextInt(16) + 8;
 				int i20 = rand.nextInt(128);
 				int l22 = l + rand.nextInt(16) + 8;
-				(new OldGenDeadBush(Blocks.deadbush)).generate(worldObj, rand, i17, i20, l22);
+				(new OldGenDeadBush(Block.deadBush.blockID)).generate(worldObj, rand, i17, i20, l22);
 			}
 	
 			if(rand.nextInt(2) == 0) //GOOD
@@ -720,21 +678,21 @@ public class ChunkGeneratorBeta implements IChunkProvider
 				int j15 = k + rand.nextInt(16) + 8;
 				int j17 = rand.nextInt(128);
 				int j20 = l + rand.nextInt(16) + 8;
-				(new OldGenFlowers(Blocks.red_flower)).generate(worldObj, rand, j15, j17, j20);
+				(new OldGenFlowers(Block.plantRed.blockID)).generate(worldObj, rand, j15, j17, j20);
 			}
 			if(rand.nextInt(4) == 0)  //GOOD
 			{
 				int k15 = k + rand.nextInt(16) + 8;
 				int k17 = rand.nextInt(128);
 				int k20 = l + rand.nextInt(16) + 8;
-				(new OldGenFlowers(Blocks.brown_mushroom)).generate(worldObj, rand, k15, k17, k20);
+				(new OldGenFlowers(Block.mushroomBrown.blockID)).generate(worldObj, rand, k15, k17, k20);
 			}
 			if(rand.nextInt(8) == 0) //GOOD
 			{
 				int l15 = k + rand.nextInt(16) + 8;
 				int l17 = rand.nextInt(128);
 				int l20 = l + rand.nextInt(16) + 8;
-				(new OldGenFlowers(Blocks.red_mushroom)).generate(worldObj, rand, l15, l17, l20);
+				(new OldGenFlowers(Block.mushroomRed.blockID)).generate(worldObj, rand, l15, l17, l20);
 			} 
 			for(int i16 = 0; i16 < 10; i16++) 
 			{
@@ -769,7 +727,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
 				int l21 = k + rand.nextInt(16) + 8;
 				int k23 = rand.nextInt(rand.nextInt(120) + 8);
 				int l24 = l + rand.nextInt(16) + 8;
-				(new OldGenLiquids(Blocks.flowing_water)).generate(worldObj, rand, l21, k23, l24);
+				(new OldGenLiquids(Block.waterMoving.blockID)).generate(worldObj, rand, l21, k23, l24);
 			}
 	
 			for(int i19 = 0; i19 < 20; i19++) //GOOD
@@ -777,7 +735,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
 				int i22 = k + rand.nextInt(16) + 8;
 				int l23 = rand.nextInt(rand.nextInt(rand.nextInt(112) + 8) + 8);
 				int i25 = l + rand.nextInt(16) + 8;
-				(new OldGenLiquids(Blocks.flowing_lava)).generate(worldObj, rand, i22, l23, i25);
+				(new OldGenLiquids(Block.lavaMoving.blockID)).generate(worldObj, rand, i22, l23, i25);
 			}
 	
 			SpawnerAnimals.performWorldGenSpawning(worldObj, biomegenbase, k + 8, l + 8, 16, 16, rand2);
@@ -793,9 +751,9 @@ public class ChunkGeneratorBeta implements IChunkProvider
 	                int j25 = j22 - (l + 8);
 	                int k25 = worldObj.getPrecipitationHeight(j19, j22);
 	                double d22 = generatedTemperatures[i24 * 16 + j25] - ((double)(k25 - 64) / 64D) * 0.29999999999999999D;
-	                if(d22 < 0.5D && k25 > 0 && k25 < 128 && worldObj.isAirBlock(j19, k25, j22) && worldObj.getBlock(j19, k25 - 1, j22).getMaterial().isSolid() && worldObj.getBlock(j19, k25 - 1, j22).getMaterial() != Material.ice)
+	                if(d22 < 0.5D && k25 > 0 && k25 < 128 && worldObj.isAirBlock(j19, k25, j22) && worldObj.getBlockMaterial(j19, k25 - 1, j22).isSolid() && worldObj.getBlockMaterial(j19, k25 - 1, j22) != Material.ice)
 	                {
-	                    worldObj.setBlock(j19, k25, j22, Blocks.snow_layer);
+	                    worldObj.setBlock(j19, k25, j22, Block.snow.blockID);
 	                }
 	            }
 	
@@ -803,11 +761,11 @@ public class ChunkGeneratorBeta implements IChunkProvider
 			
 			MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Post(ichunkprovider, worldObj, rand2, i, j, false));
 	
-			BlockFalling.fallInstantly = false;
+			BlockSand.fallInstantly = false;
     	}
     	else
     	{
-			BlockFalling.fallInstantly = true; 
+			BlockSand.fallInstantly = true; 
 			int k = i * 16;
 			int l = j * 16;
 			BiomeGenBase biomegenbase = worldObj.getWorldChunkManager().getBiomeGenAt(k + 16, l + 16);
@@ -826,7 +784,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
 				int i1 = k + rand.nextInt(16) + 8;
 				int l4 = rand.nextInt(128);
 				int i8 = l + rand.nextInt(16) + 8;
-				(new OldGenLakes(Blocks.water)).generate(worldObj, rand, i1, l4, i8);
+				(new OldGenLakes(Block.waterStill.blockID)).generate(worldObj, rand, i1, l4, i8);
 			}
 			if(rand.nextInt(8) == 0)
 			{
@@ -835,7 +793,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
 				int j8 = l + rand.nextInt(16) + 8;
 				if(i5 < 64 || rand.nextInt(10) == 0)
 				{
-					(new OldGenLakes(Blocks.lava)).generate(worldObj, rand, j1, i5, j8);
+					(new OldGenLakes(Block.lavaStill.blockID)).generate(worldObj, rand, j1, i5, j8);
 				}
 			} 
 			
@@ -868,12 +826,12 @@ public class ChunkGeneratorBeta implements IChunkProvider
 
 	                if (this.worldObj.isBlockFreezable(j19 + k, i2 - 1, j22 + l))
 	                {
-	                    this.worldObj.setBlock(j19 + k, i2 - 1, j22 + l, Blocks.ice, 0, 2);
+	                    this.worldObj.setBlock(j19 + k, i2 - 1, j22 + l, Block.ice.blockID, 0, 2);
 	                }
 
-	                if (this.worldObj.func_147478_e(j19 + k, i2, j22 + l, true))
+	                if (this.worldObj.canSnowAt(j19 + k, i2, j22 + l))
 	                {
-	                    this.worldObj.setBlock(j19 + k, i2, j22 + l, Blocks.snow_layer, 0, 2);
+	                    this.worldObj.setBlock(j19 + k, i2, j22 + l, Block.snow.blockID, 0, 2);
 	                }
 				}
 			}
@@ -915,9 +873,9 @@ public class ChunkGeneratorBeta implements IChunkProvider
         return var5 == null ? null : var5.getSpawnableList(par1EnumCreatureType);
     }
 	
-    public ChunkPosition func_147416_a(World par1World, String par2Str, int par3, int par4, int par5)
+    public ChunkPosition findClosestStructure(World par1World, String par2Str, int par3, int par4, int par5)
     {
-        return "Stronghold".equals(par2Str) && this.strongholdGenerator != null ? this.strongholdGenerator.func_151545_a(par1World, par3, par4, par5) : null;
+        return "Stronghold".equals(par2Str) && this.strongholdGenerator != null ? this.strongholdGenerator.getNearestInstance(par1World, par3, par4, par5) : null;
     }
 
     public int getLoadedChunkCount()
@@ -931,8 +889,8 @@ public class ChunkGeneratorBeta implements IChunkProvider
     {
 		if (mapFeaturesEnabled)
         {
-			strongholdGenerator.func_151539_a(this, worldObj, par1, par2, (Block[])null);
-			mineshaftGenerator.func_151539_a(this, worldObj, par1, par2, (Block[])null);
+			strongholdGenerator.generate(this, worldObj, par1, par2, (byte[])null);
+			mineshaftGenerator.generate(this, worldObj, par1, par2, (byte[])null);
 		}	
 	}
 }

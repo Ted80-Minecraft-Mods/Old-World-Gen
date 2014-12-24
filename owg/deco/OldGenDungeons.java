@@ -5,8 +5,6 @@ import java.util.Random;
 import owg.data.DungeonLoot;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
@@ -34,7 +32,7 @@ public class OldGenDungeons extends WorldGenerator
 			{
 				for (int j2 = par5 - j - 1; j2 <= par5 + j + 1; j2++)
 				{
-					Material material = par1World.getBlock(l, k1, j2).getMaterial();
+					Material material = par1World.getBlockMaterial(l, k1, j2);
 
 					if (k1 == par4 - 1 && !material.isSolid())
 					{
@@ -67,29 +65,29 @@ public class OldGenDungeons extends WorldGenerator
                 {
                     if (i1 == par3 - i - 1 || l1 == par4 - 1 || k2 == par5 - j - 1 || i1 == par3 + i + 1 || l1 == par4 + byte0 + 1 || k2 == par5 + j + 1)
                     {
-                        if (l1 >= 0 && !par1World.getBlock(i1, l1 - 1, k2).getMaterial().isSolid())
+                        if (l1 >= 0 && !par1World.getBlockMaterial(i1, l1 - 1, k2).isSolid())
                         {
-    						par1World.setBlock(i1, l1, k2, Blocks.air);
+    						par1World.setBlock(i1, l1, k2, 0);
                             continue;
                         }
 
-                        if (!par1World.getBlock(i1, l1, k2).getMaterial().isSolid())
+                        if (!par1World.getBlockMaterial(i1, l1, k2).isSolid())
                         {
                             continue;
                         }
 
                         if (l1 == par4 - 1 && par2Random.nextInt(4) != 0)
                         {
-							par1World.setBlock(i1, l1, k2, Blocks.mossy_cobblestone);
+							par1World.setBlock(i1, l1, k2, Block.cobblestoneMossy.blockID);
 						}
 						else
 						{
-							par1World.setBlock(i1, l1, k2, Blocks.cobblestone);
+							par1World.setBlock(i1, l1, k2, Block.cobblestone.blockID);
                         }
                     }
                     else
                     {
-						par1World.setBlock(i1, l1, k2, Blocks.air);
+						par1World.setBlock(i1, l1, k2, 0);
                     }
                 }
             }
@@ -112,22 +110,22 @@ public class OldGenDungeons extends WorldGenerator
 
                 int k3 = 0;
 
-                if (par1World.getBlock(l2 - 1, i3, j3).getMaterial().isSolid())
+                if (par1World.getBlockMaterial(l2 - 1, i3, j3).isSolid())
                 {
                     k3++;
                 }
 
-                if (par1World.getBlock(l2 + 1, i3, j3).getMaterial().isSolid())
+                if (par1World.getBlockMaterial(l2 + 1, i3, j3).isSolid())
                 {
                     k3++;
                 }
 
-                if (par1World.getBlock(l2, i3, j3 - 1).getMaterial().isSolid())
+                if (par1World.getBlockMaterial(l2, i3, j3 - 1).isSolid())
                 {
                     k3++;
                 }
 
-                if (par1World.getBlock(l2, i3, j3 + 1).getMaterial().isSolid())
+                if (par1World.getBlockMaterial(l2, i3, j3 + 1).isSolid())
                 {
                     k3++;
                 }
@@ -137,8 +135,8 @@ public class OldGenDungeons extends WorldGenerator
                     continue;
                 }
 
-				par1World.setBlock(l2, i3, j3, Blocks.chest);
-				TileEntityChest tileentitychest = (TileEntityChest)par1World.getTileEntity(l2, i3, j3);
+				par1World.setBlock(l2, i3, j3, Block.chest.blockID);
+				TileEntityChest tileentitychest = (TileEntityChest)par1World.getBlockTileEntity(l2, i3, j3);
 
                 if (tileentitychest == null)
                 {
@@ -168,13 +166,13 @@ public class OldGenDungeons extends WorldGenerator
             }
         }
 
-        par1World.setBlock(par3, par4, par5, Blocks.mob_spawner);
-        TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner)par1World.getTileEntity(par3, par4, par5);
+        par1World.setBlock(par3, par4, par5, Block.mobSpawner.blockID);
+        TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner)par1World.getBlockTileEntity(par3, par4, par5);
 
 
         if (tileentitymobspawner != null)
         {
-            tileentitymobspawner.func_145881_a().setEntityName(pickMobSpawner(par2Random));
+            tileentitymobspawner.getSpawnerLogic().setMobID(pickMobSpawner(par2Random));
         }
         else
         {

@@ -3,7 +3,6 @@ package owg.deco;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -23,21 +22,21 @@ public class DecoIndevHouse extends WorldGenerator
 		{
 			for(int flz = -3 + z; flz < 4 + z; flz++)
 			{
-				par1World.setBlock(flx, y - 1, flz, Blocks.cobblestone);
+				par1World.setBlock(flx, y - 1, flz, Block.cobblestone.blockID);
 			}
 		}
 		for(int flx = -3 + x; flx < 4 + x; flx++)
 		{
 			for(int flz = -3 + z; flz < 4 + z; flz++)
 			{
-				par1World.setBlock(flx, y - 2, flz, Blocks.cobblestone);
+				par1World.setBlock(flx, y - 2, flz, Block.cobblestone.blockID);
 			}
 		}
 		for(int flx = -3 + x; flx < 4 + x; flx++)
 		{
 			for(int flz = -3 + z; flz < 4 + z; flz++)
 			{
-				par1World.setBlock(flx, y - 3, flz, Blocks.cobblestone);
+				par1World.setBlock(flx, y - 3, flz, Block.cobblestone.blockID);
 			}
 		}
 		
@@ -50,7 +49,7 @@ public class DecoIndevHouse extends WorldGenerator
 				{
 					for(int frz = -3 + z; frz < 4 + z; frz++)
 					{
-						par1World.setBlock(frx, fry, frz, Blocks.mossy_cobblestone);
+						par1World.setBlock(frx, fry, frz, Block.cobblestoneMossy.blockID);
 					}
 				}	
 			}
@@ -63,7 +62,7 @@ public class DecoIndevHouse extends WorldGenerator
 				{
 					for(int frz = -3 + z; frz < 4 + z; frz++)
 					{
-						par1World.setBlock(frx, fry, frz, Blocks.planks);
+						par1World.setBlock(frx, fry, frz, Block.planks.blockID);
 					}
 				}	
 			}
@@ -76,7 +75,7 @@ public class DecoIndevHouse extends WorldGenerator
 			{
 				for(int airz = -2 + z; airz < 3 + z; airz++)
 				{
-					par1World.setBlock(airx, airy, airz, Blocks.air);
+					par1World.setBlock(airx, airy, airz, 0);
 				}
 			}	
 		}
@@ -84,48 +83,48 @@ public class DecoIndevHouse extends WorldGenerator
 		//CREATE DOOR AND TORCHES
 		if(par1World.isAirBlock(x - 4, y + 1, z) && !par1World.isAirBlock(x - 4, y - 1, z) || !par1World.isAirBlock(x - 4, y - 2, z))
 		{
-			par1World.setBlock(x - 3, y, z, Blocks.air);
-			par1World.setBlock(x - 3, y + 1, z, Blocks.air);
-			par1World.setBlock(x - 4, y, z, Blocks.air);
-			par1World.setBlock(x - 4, y + 1, z, Blocks.air);
-			par1World.setBlock(x, y + 1, z + 2, Blocks.torch);
-			par1World.setBlock(x, y + 1, z - 2, Blocks.torch);
+			par1World.setBlock(x - 3, y, z, 0);
+			par1World.setBlock(x - 3, y + 1, z, 0);
+			par1World.setBlock(x - 4, y, z, 0);
+			par1World.setBlock(x - 4, y + 1, z, 0);
+			par1World.setBlock(x, y + 1, z + 2, Block.torchWood.blockID);
+			par1World.setBlock(x, y + 1, z - 2, Block.torchWood.blockID);
 		}
 		else if(par1World.isAirBlock(x + 4, y + 1, z) && !par1World.isAirBlock(x + 4, y - 1, z) || !par1World.isAirBlock(x + 4, y - 2, z))
 		{
-			par1World.setBlock(x + 3, y, z, Blocks.air);
-			par1World.setBlock(x + 3, y + 1, z, Blocks.air);
-			par1World.setBlock(x + 4, y, z, Blocks.air);
-			par1World.setBlock(x + 4, y + 1, z, Blocks.air);
-			par1World.setBlock(x, y + 1, z + 2, Blocks.torch);
-			par1World.setBlock(x, y + 1, z - 2, Blocks.torch);
+			par1World.setBlock(x + 3, y, z, 0);
+			par1World.setBlock(x + 3, y + 1, z, 0);
+			par1World.setBlock(x + 4, y, z, 0);
+			par1World.setBlock(x + 4, y + 1, z, 0);
+			par1World.setBlock(x, y + 1, z + 2, Block.torchWood.blockID);
+			par1World.setBlock(x, y + 1, z - 2, Block.torchWood.blockID);
 		}
 		else if(par1World.isAirBlock(x, y + 1, z - 4) && !par1World.isAirBlock(x, y - 1, z - 4) || !par1World.isAirBlock(x, y - 2, z - 4))
 		{
-			par1World.setBlock(x, y, z - 3, Blocks.air);
-			par1World.setBlock(x, y + 1, z - 3, Blocks.air);
-			par1World.setBlock(x, y, z - 4, Blocks.air);
-			par1World.setBlock(x, y + 1, z - 4, Blocks.air);
-			par1World.setBlock(x + 2, y + 1, z, Blocks.torch);
-			par1World.setBlock(x - 2, y + 1, z, Blocks.torch);
+			par1World.setBlock(x, y, z - 3, 0);
+			par1World.setBlock(x, y + 1, z - 3, 0);
+			par1World.setBlock(x, y, z - 4, 0);
+			par1World.setBlock(x, y + 1, z - 4, 0);
+			par1World.setBlock(x + 2, y + 1, z, Block.torchWood.blockID);
+			par1World.setBlock(x - 2, y + 1, z, Block.torchWood.blockID);
 		}
 		else if(par1World.isAirBlock(x, y + 1, z + 4) && !par1World.isAirBlock(x, y - 1, z + 4) || !par1World.isAirBlock(x, y - 2, z + 4))
 		{
-			par1World.setBlock(x, y, z + 3, Blocks.air);
-			par1World.setBlock(x, y + 1, z + 3, Blocks.air);
-			par1World.setBlock(x, y, z + 4, Blocks.air);
-			par1World.setBlock(x, y + 1, z + 4, Blocks.air);
-			par1World.setBlock(x + 2, y + 1, z, Blocks.torch);
-			par1World.setBlock(x - 2, y + 1, z, Blocks.torch);
+			par1World.setBlock(x, y, z + 3, 0);
+			par1World.setBlock(x, y + 1, z + 3, 0);
+			par1World.setBlock(x, y, z + 4, 0);
+			par1World.setBlock(x, y + 1, z + 4, 0);
+			par1World.setBlock(x + 2, y + 1, z, Block.torchWood.blockID);
+			par1World.setBlock(x - 2, y + 1, z, Block.torchWood.blockID);
 		}
 		else 
 		{
-			par1World.setBlock(x - 3, y, z, Blocks.air);
-			par1World.setBlock(x - 3, y + 1, z, Blocks.air);
-			par1World.setBlock(x - 4, y, z, Blocks.air);
-			par1World.setBlock(x - 4, y + 1, z, Blocks.air);
-			par1World.setBlock(x, y + 1, z + 2, Blocks.torch);
-			par1World.setBlock(x, y + 1, z - 2, Blocks.torch);
+			par1World.setBlock(x - 3, y, z, 0);
+			par1World.setBlock(x - 3, y + 1, z, 0);
+			par1World.setBlock(x - 4, y, z, 0);
+			par1World.setBlock(x - 4, y + 1, z, 0);
+			par1World.setBlock(x, y + 1, z + 2, Block.torchWood.blockID);
+			par1World.setBlock(x, y + 1, z - 2, Block.torchWood.blockID);
 		}
 		return true;
     }

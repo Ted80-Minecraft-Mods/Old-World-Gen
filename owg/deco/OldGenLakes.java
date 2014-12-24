@@ -8,7 +8,6 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -19,11 +18,11 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class OldGenLakes extends WorldGenerator
 {
-    private Block field_15235_a;
+    private int fluid;
 
-    public OldGenLakes(Block i)
+    public OldGenLakes(int i)
     {
-        field_15235_a = i;
+    	fluid = i;
     }
 
     public boolean generate(World world, Random random, int i, int j, int k)
@@ -74,12 +73,12 @@ public class OldGenLakes extends WorldGenerator
                     {
                         continue;
                     }
-                    Material material = world.getBlock(i + j1, j + j3, k + j2).getMaterial();
+                    Material material = world.getBlockMaterial(i + j1, j + j3, k + j2);
                     if(j3 >= 4 && material.isLiquid())
                     {
                         return false;
                     }
-                    if(j3 < 4 && !material.isSolid() && world.getBlock(i + j1, j + j3, k + j2) != field_15235_a)
+                    if(j3 < 4 && !material.isSolid() && world.getBlockId(i + j1, j + j3, k + j2) != fluid)
                     {
                         return false;
                     }
@@ -97,7 +96,7 @@ public class OldGenLakes extends WorldGenerator
                 {
                     if(aflag[(k1 * 16 + k2) * 8 + k3])
                     {
-                        world.setBlock(i + k1, j + k3, k + k2, k3 < 4 ? field_15235_a : Blocks.air);
+                        world.setBlock(i + k1, j + k3, k + k2, k3 < 4 ? fluid : 0);
                     }
                 }
 
@@ -111,9 +110,9 @@ public class OldGenLakes extends WorldGenerator
             {
                 for(int l3 = 4; l3 < 8; l3++)
                 {
-                    if(aflag[(l1 * 16 + l2) * 8 + l3] && world.getBlock(i + l1, (j + l3) - 1, k + l2) == Blocks.dirt && world.getSavedLightValue(EnumSkyBlock.Sky, i + l1, j + l3, k + l2) > 0)
+                    if(aflag[(l1 * 16 + l2) * 8 + l3] && world.getBlockId(i + l1, (j + l3) - 1, k + l2) == Block.dirt.blockID && world.getSavedLightValue(EnumSkyBlock.Sky, i + l1, j + l3, k + l2) > 0)
                     {
-                        world.setBlock(i + l1, (j + l3) - 1, k + l2, Blocks.grass);
+                        world.setBlock(i + l1, (j + l3) - 1, k + l2, Block.grass.blockID);
                     }
                 }
 
@@ -121,7 +120,7 @@ public class OldGenLakes extends WorldGenerator
 
         }
 
-        if(field_15235_a.getMaterial() == Material.lava)
+        if(Block.blocksList[fluid].blockMaterial == Material.lava)
         {
             for(int i2 = 0; i2 < 16; i2++)
             {
@@ -130,9 +129,9 @@ public class OldGenLakes extends WorldGenerator
                     for(int i4 = 0; i4 < 8; i4++)
                     {
                         boolean flag1 = !aflag[(i2 * 16 + i3) * 8 + i4] && (i2 < 15 && aflag[((i2 + 1) * 16 + i3) * 8 + i4] || i2 > 0 && aflag[((i2 - 1) * 16 + i3) * 8 + i4] || i3 < 15 && aflag[(i2 * 16 + (i3 + 1)) * 8 + i4] || i3 > 0 && aflag[(i2 * 16 + (i3 - 1)) * 8 + i4] || i4 < 7 && aflag[(i2 * 16 + i3) * 8 + (i4 + 1)] || i4 > 0 && aflag[(i2 * 16 + i3) * 8 + (i4 - 1)]);
-                        if(flag1 && (i4 < 4 || random.nextInt(2) != 0) && world.getBlock(i + i2, j + i4, k + i3).getMaterial().isSolid())
+                        if(flag1 && (i4 < 4 || random.nextInt(2) != 0) && world.getBlockMaterial(i + i2, j + i4, k + i3).isSolid())
                         {
-                            world.setBlock(i + i2, j + i4, k + i3, Blocks.stone);
+                            world.setBlock(i + i2, j + i4, k + i3, Block.stone.blockID);
                         }
                     }
 

@@ -20,7 +20,7 @@ public class WorldTypeOWG extends WorldType
 {
 	public WorldTypeOWG(String n)
 	{
-		super(n);
+		super(12, n);
 	}
 	
     public WorldChunkManager getChunkManager(World world)
@@ -43,7 +43,7 @@ public class WorldTypeOWG extends WorldType
 		{
 			if(GeneratorType.currentGenerator == null)
 			{
-				return new WorldChunkManagerHell(BiomeList.OLDplains, 0.5F);
+				return new WorldChunkManagerHell(BiomeList.OLDplains, 0.5F, 0.5F);
 			}
 			else
 			{
@@ -65,7 +65,7 @@ public class WorldTypeOWG extends WorldType
     @SideOnly(Side.CLIENT)
     public void onCustomizeButton(Minecraft instance, GuiCreateWorld guiCreateWorld)
     {
-    	instance.displayGuiScreen(new GuiGeneratorSettings(guiCreateWorld, guiCreateWorld.field_146334_a));
+    	instance.displayGuiScreen(new GuiGeneratorSettings(guiCreateWorld, guiCreateWorld.generatorOptionsToUse));
     }
     
     public boolean isCustomizable()

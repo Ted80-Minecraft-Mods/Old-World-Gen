@@ -49,7 +49,7 @@ public class GuiGeneratorSettings extends GuiScreen
 		if(decodebool)
 		{
 			decodebool = false;
-			decodeString(createWorldGui.field_146334_a);
+			decodeString(createWorldGui.generatorOptionsToUse);
 		}
 		else
 		{
@@ -71,7 +71,7 @@ public class GuiGeneratorSettings extends GuiScreen
 	{
         if (button.id == 0) //DONE
         {
-        	createWorldGui.field_146334_a = createString();
+        	createWorldGui.generatorOptionsToUse = createString();
         	mc.displayGuiScreen(this.createWorldGui); 
         }
         else if (button.id == 1) //CANCEL
@@ -110,19 +110,19 @@ public class GuiGeneratorSettings extends GuiScreen
 		
 		//title
 		String title = "Old World Generator mod";
-		drawString(fontRendererObj, title, (int) Math.floor(width / 2) - (int) Math.floor(fontRendererObj.getStringWidth(title) / 2), 10, 16777215);
+		drawString(fontRenderer, title, (int) Math.floor(width / 2) - (int) Math.floor(fontRenderer.getStringWidth(title) / 2), 10, 16777215);
 		
 		//select generator
-    	drawString(fontRendererObj, translatedDrawStrings[0], width / 2 - 155 + 1, 40, 10526880);
+    	drawString(fontRenderer, translatedDrawStrings[0], width / 2 - 155 + 1, 40, 10526880);
 
     	if(hasSettings)
     	{
-    		drawString(fontRendererObj, translatedDrawStrings[1], width / 2 + 6, 40, 10526880);
+    		drawString(fontRenderer, translatedDrawStrings[1], width / 2 + 6, 40, 10526880);
     	}
     	
-    	drawString(fontRendererObj, "Server config: ", width / 2 - 155 + 1, 165, 16777215);
-    	drawString(fontRendererObj, "level-type=OWG", width / 2 - 155 + 1, 182, 10526880);
-    	drawString(fontRendererObj, "generator-settings=" + createString(), width / 2 - 155 + 1, 192, 10526880);
+    	drawString(fontRenderer, "Server config: ", width / 2 - 155 + 1, 165, 16777215);
+    	drawString(fontRenderer, "level-type=OWG", width / 2 - 155 + 1, 182, 10526880);
+    	drawString(fontRenderer, "generator-settings=" + createString(), width / 2 - 155 + 1, 192, 10526880);
 		
 		super.drawScreen(par1, par2, par3);
 	}
@@ -156,12 +156,12 @@ public class GuiGeneratorSettings extends GuiScreen
 		{
     		if(settings.get(i).dependencie > -1)
     		{
-    			settings.get(i).button.visible = false;
+    			settings.get(i).button.drawButton = false;
     			for(int p = 0; p < settings.get(i).depvalues.length; p++)
     			{
     				if(settings.get(settings.get(i).dependencie - 20).selected == settings.get(i).depvalues[p])
     				{
-    					settings.get(i).button.visible = true;
+    					settings.get(i).button.drawButton = true;
     				}
     			}
     		}
