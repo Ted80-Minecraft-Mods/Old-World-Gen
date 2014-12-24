@@ -35,6 +35,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.MapGenCaves;
+import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.feature.WorldGenDungeons;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraft.world.gen.structure.MapGenMineshaft;
@@ -55,6 +56,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
     public NoiseOctavesBeta field_922_a;
     public NoiseOctavesBeta field_921_b;
     public NoiseOctavesBeta mobSpawnerNoise;
+    private NoiseGeneratorPerlin field_147430_m;
 	
     private World worldObj;
     private final boolean mapFeaturesEnabled;
@@ -62,13 +64,13 @@ public class ChunkGeneratorBeta implements IChunkProvider
     private double sandNoise[];
     private double gravelNoise[];
     private double stoneNoise[];
-    private MapGenCaves caveGen = new MapGenCaves();
     private MapGenOLD field_902_u;
     private MapGenStronghold strongholdGenerator = new MapGenStronghold();
     private MapGenMineshaft mineshaftGenerator = new MapGenMineshaft();
     private BiomeGenBase biomesForGeneration[];
 	private int biomeSettings;
-	private int worldHeight;
+	private Block[] tempBlocks;
+	private byte[] tempMetadata;
 	
     double field_4185_d[];
     double field_4184_e[];
@@ -91,7 +93,11 @@ public class ChunkGeneratorBeta implements IChunkProvider
         mapFeaturesEnabled = par4;
         
         biomeSettings = bSettings;
-        worldHeight = biomeSettings == 0 ? 128 : 256;
+        if(biomeSettings > 0)
+        {
+        	tempBlocks = new Block[65536];
+        	tempMetadata = new byte[65536];
+        }
         
         field_912_k = new NoiseOctavesBeta(rand, 16);
         field_911_l = new NoiseOctavesBeta(rand, 16);
@@ -101,6 +107,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
         field_922_a = new NoiseOctavesBeta(rand, 10);
         field_921_b = new NoiseOctavesBeta(rand, 16);
         mobSpawnerNoise = new NoiseOctavesBeta(rand, 8);
+        field_147430_m = new NoiseGeneratorPerlin(this.rand, 4);
         
         DungeonLoot.init(l);
     }
@@ -148,10 +155,11 @@ public class ChunkGeneratorBeta implements IChunkProvider
                                 Block l2 = Blocks.air;
                                 if(k1 * 8 + l1 < byte1)
                                 {
-                                    if(d17 < 0.5D && k1 * 8 + l1 >= byte1 - 1)
+                                    if(d17 < 0.5D && k1 * 8 + l1 >= byte1 - 1 && biomeSettings == 0)
                                     {
                                         l2 = Blocks.ice;
-                                    } else
+                                    } 
+                                    else
                                     {
                                         l2 = Blocks.water;
                                     }
@@ -185,22 +193,54 @@ public class ChunkGeneratorBeta implements IChunkProvider
 
     public void replaceBlocksForBiome(int i, int j, Block[] blocks, byte[] metadata, BiomeGenBase abiomegenbase[])
     {
-        byte byte0 = 64;
-        double d = 0.03125D;
-        sandNoise = field_909_n.generateNoiseOctaves(sandNoise, i * 16, j * 16, 0.0D, 16, 16, 1, d, d, 1.0D);
-        gravelNoise = field_909_n.generateNoiseOctaves(gravelNoise, i * 16, 109.0134D, j * 16, 16, 1, 16, d, 1.0D, d);
-        stoneNoise = field_908_o.generateNoiseOctaves(stoneNoise, i * 16, j * 16, 0.0D, 16, 16, 1, d * 2D, d * 2D, d * 2D);
-        for(int k = 0; k < 16; k++)
-        {
-            for(int l = 0; l < 16; l++)
-            {
-                BiomeGenBase biomegenbase = abiomegenbase[k + l * 16];
-                //if(biomeSettings > 0)
-                //{
-                //	biomegenbase.genTerrainBlocks(this.worldObj, this.rand, blocks, metadata, i * 16 + k, j * 16 + l, this.stoneNoise[l + k * 16]);
-                //}
-                //else
-                //{
+    	if(biomeSettings > 0)
+    	{
+            //double d0 = 0.03125D;
+            stoneNoise = field_147430_m.func_151599_a(stoneNoise, (double)(i * 16), (double)(j * 16), 16, 16, 0.0625D, 0.0625D, 1.0D);
+	        //stoneNoise = field_908_o.generateNoiseOctaves(stoneNoise, i * 16, j * 16, 0.0D, 16, 16, 1, 0.03125D * 2D, 0.03125D * 2D, 0.03125D * 2D);
+	        int l, m;
+	        for(int k = 0; k < 16; k++)
+	        {
+	            for(l = 0; l < 16; l++)
+	            {
+	            	//THIS IS THE SHITTIEST SOLUTION EVER, DEAL WITH IT!
+	            	
+	            	for(m = 0; m < 256; m++)
+	            	{
+	            		if(m < 128)
+	            		{
+	            			tempBlocks[(l * 16 + k) * 256 + m] = blocks[(l * 16 + k) * 128 + m];
+	            		}
+	            		else
+	            		{
+	            			tempBlocks[m] = Blocks.air;
+	            		}
+	            		tempMetadata[(l * 16 + k) * 256 + m] = 0;
+	            	}
+	            	
+	            	abiomegenbase[k + l * 16].genTerrainBlocks(worldObj, rand, tempBlocks, tempMetadata, i * 16 + k, j * 16 + l, stoneNoise[l + k * 16]);
+	            	
+	            	for(m = 0; m < 128; m++)
+	            	{
+	            		blocks[(l * 16 + k) * 128 + m] = tempBlocks[(l * 16 + k) * 256 + m];
+	            		metadata[(l * 16 + k) * 128 + m] = tempMetadata[(l * 16 + k) * 256 + m];
+	            	}
+	            }
+	        }
+    	}
+    	else
+    	{
+	        byte byte0 = 64;
+	        double d = 0.03125D;
+	        sandNoise = field_909_n.generateNoiseOctaves(sandNoise, i * 16, j * 16, 0.0D, 16, 16, 1, d, d, 1.0D);
+	        gravelNoise = field_909_n.generateNoiseOctaves(gravelNoise, i * 16, 109.0134D, j * 16, 16, 1, 16, d, 1.0D, d);
+	        stoneNoise = field_908_o.generateNoiseOctaves(stoneNoise, i * 16, j * 16, 0.0D, 16, 16, 1, d * 2D, d * 2D, d * 2D);
+	        for(int k = 0; k < 16; k++)
+	        {
+	            for(int l = 0; l < 16; l++)
+	            {
+	                BiomeGenBase biomegenbase = abiomegenbase[k + l * 16];
+
 	                boolean flag = sandNoise[k + l * 16] + rand.nextDouble() * 0.20000000000000001D > 0.0D;
 	                boolean flag1 = gravelNoise[k + l * 16] + rand.nextDouble() * 0.20000000000000001D > 3D;
 	                int i1 = (int)(stoneNoise[k + l * 16] / 3D + 3D + rand.nextDouble() * 0.25D);
@@ -279,7 +319,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
 	                        byte2 = Blocks.sandstone;
 	                    }
 	                }
-                //}
+            	}
             }
         }
     }
@@ -292,21 +332,14 @@ public class ChunkGeneratorBeta implements IChunkProvider
     public Chunk provideChunk(int i, int j)
     {
         rand.setSeed((long)i * 0x4f9939f508L + (long)j * 0x1ef1565bd5L);
-        Block[] blocks = new Block[32768];//biomeSettings == 0 ? 32768 : 65536];
-        byte[] metadata = new byte[32768];//biomeSettings == 0 ? 32768 : 65536];
+        Block[] blocks = new Block[32768];
+        byte[] metadata = new byte[32768];
         biomesForGeneration = worldObj.getWorldChunkManager().loadBlockGeneratorData(biomesForGeneration, i * 16, j * 16, 16, 16);
         double ad[] = ManagerOWG.temperature;
         generateTerrain(i, j, blocks, biomesForGeneration, ad);
         replaceBlocksForBiome(i, j, blocks, metadata, biomesForGeneration);
         
-        if(biomeSettings == 0)
-        {
-            field_902_u.generate(this, worldObj, i, j, blocks);
-        }
-        else
-        {
-        	caveGen.func_151539_a(this, worldObj, i, j, blocks);
-        }
+        field_902_u.generate(this, worldObj, i, j, blocks);
 		
         if (mapFeaturesEnabled)
         {
@@ -317,11 +350,21 @@ public class ChunkGeneratorBeta implements IChunkProvider
         Chunk chunk = new Chunk(worldObj, blocks, metadata, i, j);
         byte abyte1[] = chunk.getBiomeArray();
 
-        for (int k = 0; k < abyte1.length; k++)
+        if(biomeSettings == 0)
         {
-            abyte1[k] = (byte)biomesForGeneration[k].biomeID;
-        }		
-		
+	        for (int k = 0; k < abyte1.length; k++)
+	        {
+	            abyte1[k] = (byte)biomesForGeneration[k].biomeID;
+	        }		
+        }
+        else
+        {
+	        for (int k = 0; k < abyte1.length; k++)
+	        {
+	            abyte1[k] = (byte)biomesForGeneration[(int)(((k * 16) & 0xff) + (int)(k / 16))].biomeID;
+	        }	
+        }
+        
         chunk.generateSkylightMap();
         return chunk;
     }
@@ -814,13 +857,14 @@ public class ChunkGeneratorBeta implements IChunkProvider
 			
 			biomegenbase.decorate(worldObj, rand, k, l);
 			SpawnerAnimals.performWorldGenSpawning(worldObj, biomegenbase, k + 8, l + 8, 16, 16, rand);
-			/*
-			
-			for(int j19 = k + 8; j19 < k + 8 + 16; j19++)
+
+	        k += 8;
+	        l += 8;
+			for(int j19 = 0; j19 < 16; j19++)
 			{
-				for(int j22 = l + 8; j22 < l + 8 + 16; j22++)
+				for(int j22 = 0; j22 < 16; j22++)
 				{
-	                int i2 = this.worldObj.getPrecipitationHeight(k + j19, l + j22);
+	                int i2 = worldObj.getPrecipitationHeight(k + j19, l + j22);
 
 	                if (this.worldObj.isBlockFreezable(j19 + k, i2 - 1, j22 + l))
 	                {
@@ -832,7 +876,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
 	                    this.worldObj.setBlock(j19 + k, i2, j22 + l, Blocks.snow_layer, 0, 2);
 	                }
 				}
-			}*/
+			}
 
 			MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Post(ichunkprovider, worldObj, rand, i, j, false));
 			

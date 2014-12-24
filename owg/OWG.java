@@ -2,6 +2,7 @@ package owg;
 
 import owg.biomes.BiomeList;
 import owg.config.ConfigOWG;
+import owg.support.Support;
 import owg.world.WorldTypeOWG;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -38,5 +39,6 @@ public class OWG
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) 
 	{
+		Support.init();
 	}
 }

@@ -72,7 +72,7 @@ public class ChunkGeneratorAlpha implements IChunkProvider
     int field_914_i[][];
     private double field_4178_w[];
 
-    public ChunkGeneratorAlpha(World world, long l, boolean par4, int bSettings)
+    public ChunkGeneratorAlpha(World world, long l, boolean par4)
     {
         field_905_r = new double[256];
         field_904_s = new double[256];
@@ -83,7 +83,6 @@ public class ChunkGeneratorAlpha implements IChunkProvider
         mapFeaturesEnabled = par4;
         field_913_j = new Random(l);
         rand2 = new Random(l);
-        biomeSettings = bSettings;
         field_912_k = new NoiseOctavesAlpha(field_913_j, 16);
         field_911_l = new NoiseOctavesAlpha(field_913_j, 16);
         field_910_m = new NoiseOctavesAlpha(field_913_j, 8);

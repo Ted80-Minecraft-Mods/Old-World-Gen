@@ -20,17 +20,9 @@ public class GeneratorTypeAlpha12 extends GeneratorType
 	}
 	
 	@Override
-	public boolean getSettings(GuiGeneratorSettings gui)
-	{
-		gui.settings.add(new GuiSettingsButton(new String[]{StatCollector.translateToLocal("owg.biomes.biomes") + ": " + StatCollector.translateToLocal("owg.biomes.original"), StatCollector.translateToLocal("owg.biomes.biomes") + ": " + StatCollector.translateToLocal("owg.biomes.vanilla"), StatCollector.translateToLocal("owg.biomes.biomes") + ": " + StatCollector.translateToLocal("owg.biomes.all")}, new int[]{0, 1, 2}, 20, 50, gui.width));
-		return true;
-	}
-	
-	@Override
 	public WorldChunkManager getServerWorldChunkManager(World world)
     {
-		int biomes = trySetting(0, 2);
-		return new ManagerOWG(world, true, biomes);
+		return new ManagerOWG(world, true, 0);
     }
 
 	@Override
@@ -42,7 +34,6 @@ public class GeneratorTypeAlpha12 extends GeneratorType
 	@Override
     public IChunkProvider getChunkGenerator(World world)
     {	
-		int biomes = trySetting(0, 2);
-		return new ChunkGeneratorAlpha(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled(), biomes);
+		return new ChunkGeneratorAlpha(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled());
     }
 }
