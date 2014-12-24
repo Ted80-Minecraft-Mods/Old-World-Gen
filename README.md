@@ -14,6 +14,18 @@ Planned:
 - option for new blocks/items from latest minecraft updates in old generators
 
 ## CHANGELOG ##
-
+    
+    Version 1.0.2 '24-12-2014'
+    - Added support for biomes o plenty mod
+    - Added new biomes option: original biomes, vanilla biomes, all biomes (vanilla + mods)
+    - Added dungeon settings to indev
+    - Fixed spawn location in indev worlds
+    - Changed dungeon loot for all generators
+    - Added Biome dictionary to all biomes
+    - Fixed snow spawing
+    
+    Version 1.0.1 '16-12-2014'
+    - Fixed multiplayer generator settings bug
+    
     Version 1.0.0 '28-09-2014'
     - Release
