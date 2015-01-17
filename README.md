@@ -10,9 +10,6 @@ Features:
 - infdev
 - indev
 
-Planned:
-- option for new blocks/items from latest minecraft updates in old generators
-
 ## CHANGELOG ##
 
     Version 1.0.3 '17-01-2014'
