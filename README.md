@@ -14,6 +14,10 @@ Planned:
 - option for new blocks/items from latest minecraft updates in old generators
 
 ## CHANGELOG ##
+
+    Version 1.0.3 '17-01-2014'
+    - Added support for ExtraBiomeXL and Thaumcraft
+    - Fixed some compatibility issues
     
     Version 1.0.2 '24-12-2014'
     - Added support for biomes o plenty mod
