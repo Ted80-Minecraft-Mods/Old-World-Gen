@@ -28,6 +28,7 @@ public class Support
 	public static ArrayList<BiomeGenBase> biomes_cold;
 	public static ArrayList<BiomeGenBase> biomes_wet;
 	public static ArrayList<BiomeGenBase> biomes_hot;
+	public static ArrayList<BiomeGenBase> biomes_small;
 	
 	public static void init()
 	{
@@ -35,12 +36,28 @@ public class Support
 		biomes_cold = new ArrayList<BiomeGenBase>();
 		biomes_wet = new ArrayList<BiomeGenBase>();
 		biomes_hot = new ArrayList<BiomeGenBase>();
+		biomes_small = new ArrayList<BiomeGenBase>();
 		
 		addDefaultBiomes();
 		
 		if (Loader.isModLoaded("BiomesOPlenty"))
 		{
 			SupportBOP.init();
+		}
+		
+		if (Loader.isModLoaded("ExtrabiomesXL"))
+		{
+			SupportEBXL.init();
+		}
+		
+		if (Loader.isModLoaded("Thaumcraft"))
+		{
+			SupportTC.init();
+		}
+		
+		if (Loader.isModLoaded("Highlands"))
+		{
+			SupportHL.init();
 		}
 	}
 	

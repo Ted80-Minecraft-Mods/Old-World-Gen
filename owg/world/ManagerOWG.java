@@ -36,11 +36,15 @@ public class ManagerOWG extends WorldChunkManager
     public static ArrayList<BiomeGenBase> biomeList_cold;
     public static ArrayList<BiomeGenBase> biomeList_hot;
     public static ArrayList<BiomeGenBase> biomeList_wet;
+    public static ArrayList<BiomeGenBase> biomeList_small;
     public static int biomeListSnowLength;
     public static int biomeListColdLength;
     public static int biomeListHotLength;
     public static int biomeListWetLength;
+    public static int biomeListSmallLength;
     public static int biomeSetting;
+    public static boolean isSmallEnabled;
+    
     private static PerlinNoise perlin;
     private static CellNoise biomecell;
     
@@ -66,6 +70,8 @@ public class ManagerOWG extends WorldChunkManager
 	        biomeList_cold = new ArrayList<BiomeGenBase>();
 	        biomeList_hot = new ArrayList<BiomeGenBase>();
 	        biomeList_wet = new ArrayList<BiomeGenBase>();
+	        biomeList_small = new ArrayList<BiomeGenBase>();
+	        
 	        biomeSetting = biomes;
 	        perlin = new PerlinNoise(seed);
 	        biomecell = new CellNoise(seed, (short)0);
@@ -125,6 +131,12 @@ public class ManagerOWG extends WorldChunkManager
 				biomeListColdLength = biomeList_cold.size();
 				biomeListHotLength = biomeList_hot.size();
 				biomeListWetLength = biomeList_wet.size();
+				biomeListSmallLength = biomeList_small.size();
+				
+				if(biomeListSmallLength > 0)
+				{
+					isSmallEnabled = true;
+				}
 			}
         }
     }    
@@ -220,7 +232,14 @@ public class ManagerOWG extends WorldChunkManager
 					offY = perlin.noise2((par1 + j11 + 1000) / 30F, (par2 + k11) / 30F) * 80 + perlin.noise2((par1 + j11 - 1000) / 7F, (par2 + k11) / 7F) * 20;
 					c = (biomecell.noise((par1 + j11 + offX + 1000) / 1000D, (par2 + k11 - offY) / 1000D, 1D) * 0.5f) + 0.5f;
 					
-					if(c < 0.25f)
+					if(isSmallEnabled && (biomecell.noise(par1 / 140D, par2 / 140D, 1D) * 0.5f) + 0.5f > 0.95f)
+					{
+						h = (biomecell.noise((par1 + j11 + offX + 2000) / 180D, (par2 + k11 - offY) / 180D, 1D) * 0.5f) + 0.5f;
+						h = h < 0f ? 0f : h >= 0.9999999f ? 0.9999999f : h;
+						h *= biomeListSmallLength;
+						abiomegenbase[i2++] = biomeList_small.get((int)(h)).biomeID;
+					}
+					else if(c < 0.25f)
 					{
 						h = (biomecell.noise((par1 + j11 + offX + 2000) / 180D, (par2 + k11 - offY) / 180D, 1D) * 0.5f) + 0.5f;
 						h = h < 0f ? 0f : h >= 0.9999999f ? 0.9999999f : h;

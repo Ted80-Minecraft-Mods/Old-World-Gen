@@ -41,7 +41,10 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraft.world.gen.structure.MapGenMineshaft;
 import net.minecraft.world.gen.structure.MapGenStronghold;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
+import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
+import net.minecraftforge.event.terraingen.TerrainGen;
 
 public class ChunkGeneratorBeta implements IChunkProvider
 {
@@ -816,11 +819,15 @@ public class ChunkGeneratorBeta implements IChunkProvider
 			long l2 = (rand.nextLong() / 2L) * 2L + 1L;
 			rand.setSeed((long)i * l1 + (long)j * l2 ^ worldObj.getSeed());
 			double d = 0.25D;
+	        boolean flag = false;
 
 			MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Pre(ichunkprovider, worldObj, rand, i, j, false));
 			
 			strongholdGenerator.generateStructuresInChunk(worldObj, rand, i, j);
-			
+
+	        boolean gen = false;
+	        
+			gen = TerrainGen.populate(this, worldObj, rand, i, j, flag, PopulateChunkEvent.Populate.EventType.LAKE);
 			if(rand.nextInt(4) == 0)
 			{
 				int i1 = k + rand.nextInt(16) + 8;
@@ -828,6 +835,8 @@ public class ChunkGeneratorBeta implements IChunkProvider
 				int i8 = l + rand.nextInt(16) + 8;
 				(new OldGenLakes(Blocks.water)).generate(worldObj, rand, i1, l4, i8);
 			}
+			
+			gen = TerrainGen.populate(this, worldObj, rand, i, j, flag, PopulateChunkEvent.Populate.EventType.LAVA);
 			if(rand.nextInt(8) == 0)
 			{
 				int j1 = k + rand.nextInt(16) + 8;
@@ -839,6 +848,7 @@ public class ChunkGeneratorBeta implements IChunkProvider
 				}
 			} 
 			
+			gen = TerrainGen.populate(this, worldObj, rand, i, j, flag, PopulateChunkEvent.Populate.EventType.DUNGEON);
 			for(int k1 = 0; k1 < 8; k1++)
 			{
 				int j5 = k + rand.nextInt(16) + 8;
@@ -856,8 +866,14 @@ public class ChunkGeneratorBeta implements IChunkProvider
 			}
 			
 			biomegenbase.decorate(worldObj, rand, k, l);
-			SpawnerAnimals.performWorldGenSpawning(worldObj, biomegenbase, k + 8, l + 8, 16, 16, rand);
 
+	        if (TerrainGen.populate(this, worldObj, rand, i, j, flag, PopulateChunkEvent.Populate.EventType.ANIMALS))
+	        {
+	            SpawnerAnimals.performWorldGenSpawning(this.worldObj, worldObj.getBiomeGenForCoords(k + 16, l + 16), k + 8, l + 8, 16, 16, this.rand);
+	        }
+
+	        TerrainGen.populate(this, worldObj, rand, i, j, flag, PopulateChunkEvent.Populate.EventType.ICE);
+	        
 	        k += 8;
 	        l += 8;
 			for(int j19 = 0; j19 < 16; j19++)
